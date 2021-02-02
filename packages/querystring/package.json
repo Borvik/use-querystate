@@ -1,0 +1,17 @@
+{
+  "name": "@borvik/querystring",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Chris Kolkman",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "~3.8.3",
+    "jest": "~26.6.3",
+    "ts-jest": "~26.5.0",
+    "@types/jest": "~26.0.20"
+  }
+}
