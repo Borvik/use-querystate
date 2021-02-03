@@ -1,29 +1,37 @@
 import { encode, decode } from "./encoder";
 import { splitCommas } from "./splitCommas";
-import { isset } from "./isset";
+import { isset, isStringable } from "./isset";
+import cleanDeep from 'clean-deep';
+import set from 'lodash/set';
 
 export class QueryString {
 
-  static stringify(obj: any): string {
+  /**
+   * Serializes an object to the query string format
+   * 
+   * @param obj Object to serialize to query string format
+   */
+  static stringify<T extends {}>(obj: T): string {
     let seenObjects: any[] = [];
 
-    function doStringify(obj: any, nested: boolean): string {
-      const typ = typeof obj;
-
-      if (obj && typ === 'object') {
+    function doStringify(obj: unknown, nested: boolean): string {
+      if (obj && typeof obj === 'object') {
         if (seenObjects.includes(obj))
           return '';
         seenObjects.push(obj);
       }
 
-      if (Array.isArray(obj)) {
+      if (typeof obj === 'undefined' || obj === null) {
+        return '';
+      }
+      else if (Array.isArray(obj)) {
         let arrResult = obj.filter(isset)
           .map((a: any) => doStringify(a, true))
           .join(',');
         return arrResult;
       }
-      else if (typ === 'object') {
-        let keys = Object.keys(obj);
+      else if (typeof obj === 'object' && !!obj) {
+        let keys = Object.keys(obj) as (keyof typeof obj)[];
 
         // filter out null/undefined keys
         keys = keys.filter(k => isset(obj[k]));
@@ -45,31 +53,39 @@ export class QueryString {
         let keyValues = keys.map(key => `${encode(key)}${keyValueSep}${doStringify(obj[key], true)}`);
         return `${prefix}${keyValues.join(keySep)}${suffix}`;
       }
-      else if (!isset(typ) || typ === 'function' || typ === 'symbol') {
+      else if (typeof obj === 'function' || typeof obj === 'symbol') {
         return '';
       }
-      else if (typ === 'boolean') {
+      else if (typeof obj === 'boolean') {
         return obj ? '1' : '0';
       }
-      else if (typ === 'number') {
+      else if (typeof obj === 'number') {
         if (Number.isNaN(obj)) return '';
+        return encode(obj.toString());
+      }
+      else if (isStringable(obj)) {
         return encode(obj.toString());
       }
       else {
         // scalar value - toString to convert numbers to strings for encode
-        return encode(obj.toString());
+        return encode(`${obj}`);
       }
     }
     
     return doStringify(obj, false);
   }
 
-  static parse(qs: string): any {
+  /**
+   * Decodes a query string encoded with this format to an object
+   * 
+   * @param qs Query string to parse to an object
+   */
+  static parse(qs: string): Record<string, unknown> {
     qs = (qs ?? '').trim();
     if (!qs || qs === '?') return {};
     if (qs[0] === '?') qs = qs.substr(1);
 
-    let result: any = {};
+    let result: Record<string, unknown> = {};
     
     function parseValue(value: string): any {
       // value like: (a:b;c:d),(e:f,g:h)
@@ -120,5 +136,24 @@ export class QueryString {
     }
 
     return result;
+  }
+
+  /**
+   * Merges an existing query string, with new values to form a new query string.
+   * 
+   * @param origQS String containing the original query string to merge new values with
+   * @param newValues An object containing new values to add to the query string
+   */
+  static merge<T extends {}>(origQS: string, newValues: T): string {
+    let qsObject = QueryString.parse(origQS);
+
+    let newKeys = Object.keys(newValues) as (keyof T)[];
+    for (let key of newKeys) {
+      if (typeof newValues[key] === 'undefined') continue;
+      set(qsObject, key, newValues[key]);
+    }
+
+    qsObject = cleanDeep(qsObject, { emptyStrings: false });
+    return QueryString.stringify(qsObject);
   }
 }

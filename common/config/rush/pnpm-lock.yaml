@@ -1,7 +1,10 @@
 dependencies:
   '@rush-temp/querystring': 'file:projects/querystring.tgz'
   '@types/jest': 26.0.20
+  '@types/lodash': 4.14.168
+  clean-deep: 3.4.0
   jest: 26.6.3
+  lodash: 4.17.20
   ts-jest: 26.5.0_jest@26.6.3+typescript@3.8.3
   typescript: 3.8.3
 lockfileVersion: 5.2
@@ -562,6 +565,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-9zi2Y+5USJRxd0FsahERhBwlcvFh6D2GLQnY2FH2BzK8J9s9omvNHIbvABwIluXa0fD8XVKMLTO0aOEuUfACAA==
+  /@types/lodash/4.14.168:
+    dev: false
+    resolution:
+      integrity: sha512-oVfRvqHV/V6D1yifJbVRU3TMp8OT6o6BG+U9MkwuJ3U8/CsDHvalRpsxBqivn71ztOFZBTfJMvETbqHiaNSj7Q==
   /@types/node/14.14.22:
     dev: false
     resolution:
@@ -975,6 +982,16 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-qOhPa/Fj7s6TY8H8esGu5QNpMMQxz79h+urzrNYN6mn+9BnxlDGf5QZ+XeCDsxSjPqsSR56XOZOJmpeurnLMeg==
+  /clean-deep/3.4.0:
+    dependencies:
+      lodash.isempty: 4.4.0
+      lodash.isplainobject: 4.0.6
+      lodash.transform: 4.6.0
+    dev: false
+    engines:
+      node: '>=4'
+    resolution:
+      integrity: sha512-Lo78NV5ItJL/jl+B5w0BycAisaieJGXK1qYi/9m4SjR8zbqmrUtO7Yhro40wEShGmmxs/aJLI/A+jNhdkXK8mw==
   /cliui/6.0.0:
     dependencies:
       string-width: 4.2.0
@@ -2510,10 +2527,22 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
+  /lodash.isempty/4.4.0:
+    dev: false
+    resolution:
+      integrity: sha1-b4bL7di+TsmHvpqvM8loTbGzHn4=
+  /lodash.isplainobject/4.0.6:
+    dev: false
+    resolution:
+      integrity: sha1-fFJqUtibRcRcxpC4gWO+BJf1UMs=
   /lodash.sortby/4.7.0:
     dev: false
     resolution:
       integrity: sha1-7dFMgk4sycHgsKG0K7UhBRakJDg=
+  /lodash.transform/4.6.0:
+    dev: false
+    resolution:
+      integrity: sha1-EjBkIvYzJK7YSD0/ODMrX2cFR6A=
   /lodash/4.17.20:
     dev: false
     resolution:
@@ -3876,19 +3905,25 @@ packages:
   'file:projects/querystring.tgz':
     dependencies:
       '@types/jest': 26.0.20
+      '@types/lodash': 4.14.168
+      clean-deep: 3.4.0
       jest: 26.6.3
+      lodash: 4.17.20
       ts-jest: 26.5.0_jest@26.6.3+typescript@3.8.3
       typescript: 3.8.3
     dev: false
     name: '@rush-temp/querystring'
     resolution:
-      integrity: sha512-wwlltR4eYzmX7w8LYb9N+DzhfRrCNzG21NtxAtstunbRhEYZABdOIgdNLyzxhEfJaoIs8n09tuP4eIF7yLuSng==
+      integrity: sha512-9z/jEDpPsJGQk6VIWtBhuBbW0eG+ip14k6hl4tU0tHSywPqjFVElMxigsUhNfdutr6TTSW2SXktk20+hFPZJDw==
       tarball: 'file:projects/querystring.tgz'
     version: 0.0.0
 registry: ''
 specifiers:
   '@rush-temp/querystring': 'file:./projects/querystring.tgz'
   '@types/jest': ~26.0.20
+  '@types/lodash': ~4.14.168
+  clean-deep: ~3.4.0
   jest: ~26.6.3
+  lodash: ~4.17.20
   ts-jest: ~26.5.0
   typescript: ~3.8.3

@@ -1,6 +1,6 @@
 ## Introduction
 
-Skip to the format and usage [here](#format)
+Skip to the [format](#format) and [api](#api)
 
 > _tl;dr_: This is a custom format that _**mostly**_ follows RFC specs and isn't compatible with most other query string parsers.
 
@@ -101,19 +101,48 @@ qs = {
 }
 ```
 
-## Usage
+## API
 
-Example in typescript.
+Examples are in typescript, and assume: `import { QueryString } from '@borvik/querystring';`
+
+### `stringify`
 
 ```typescript
-import { QueryString } from '@borvik/querystring';
-
 let encoded = QueryString.stringify({a: 'b'});
 // encoded = "a=b" - no question mark
-
-let decoded = QueryString.parse('?a=b'); // in parsing question mark is optional
-// decoded = {a: 'b'}
 ```
+
+Serializes an object to the query string format.
+
+This can handle nested objects and arrays, skipping `functions`, `Symbols`, `null` and `undefined`.
+
+### `parse`
+
+```typescript
+let decoded = QueryString.parse('?a=b&c=5');
+// decoded = {a: 'b', c: '5'}
+```
+
+Decodes a query string encoded with this format to an object
+
+The leading question mark is optional.\
+Single value arrays are not parseable.\
+All values will be strings.
+
+### `merge`
+
+```typescript
+let merged = QueryString.merge('?a=b&c=1&d=e', {c: 2, d: null});
+// merged = "a=b&c=2"
+```
+
+Merges an existing query string, with new values to form a new query string.
+
+This combines first calling a `parse` on the original, then merging the result with the new values, and finally calling `stringify`.
+
+> Note: This does _**not**_ do a _deep_ merge, the top level properties specified in the new value will completely replace the top level of the query string.
+
+> Note: In the example above setting `d` to `undefined` would not work as that would be skipped from the merge process.
 
 ## FAQ
 

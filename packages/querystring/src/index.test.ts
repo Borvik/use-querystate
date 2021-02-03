@@ -72,7 +72,7 @@ describe('Parsing Tests', () => {
 
 describe('Stringify Tests', () => {
   test('Simple QS', () => {
-    expect(QueryString.stringify({a: 'b', c: 'd e'})).toBe('a=b&c=d+e');
+    expect(QueryString.stringify({a: 'b', c: 'd e', f: 5, g: true, h: false})).toBe('a=b&c=d+e&f=5&g=1&h=0');
   });
 
   test('Array Single Value', () => {
@@ -85,5 +85,13 @@ describe('Stringify Tests', () => {
 
   test('Simple Object', () => {
     expect(QueryString.stringify({a: {b: 'c', d: 'e'}})).toBe('a=(b:c;d:e)');
+  });
+
+  test('Simple Merge', () => {
+    expect(QueryString.merge('a=b', {c: 5})).toBe('a=b&c=5');
+  });
+
+  test('Merge Unset', () => {
+    expect(QueryString.merge('a=b&c=5', {c: null})).toBe('a=b');
   });
 });
