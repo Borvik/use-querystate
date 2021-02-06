@@ -3,6 +3,10 @@ import { splitCommas } from "./splitCommas";
 import { isset, isStringable } from "./isset";
 import cleanDeep from 'clean-deep';
 import set from 'lodash/set';
+import get from 'lodash/get';
+import { MergeOptions, ParseOptions } from "./types";
+import { getObjectPaths } from "./pathTree";
+import { convert } from "./convert";
 
 export class QueryString {
 
@@ -79,8 +83,9 @@ export class QueryString {
    * Decodes a query string encoded with this format to an object
    * 
    * @param qs Query string to parse to an object
+   * @param options Parse options to allow transforming the data to proper types
    */
-  static parse(qs: string): Record<string, unknown> {
+  static parse(qs: string, options: ParseOptions = {}): Record<string, unknown> {
     qs = (qs ?? '').trim();
     if (!qs || qs === '?') return {};
     if (qs[0] === '?') qs = qs.substr(1);
@@ -135,6 +140,9 @@ export class QueryString {
       result[decode(key)] = parseValue(value);
     }
 
+    if (typeof options.types !== 'undefined') {
+      result = convert(result, options.definedTuples ?? false, options.types);
+    }
     return result;
   }
 
@@ -143,14 +151,22 @@ export class QueryString {
    * 
    * @param origQS String containing the original query string to merge new values with
    * @param newValues An object containing new values to add to the query string
+   * @param options Merge options
    */
-  static merge<T extends {}>(origQS: string, newValues: T): string {
+  static merge<T extends {}>(origQS: string, newValues: T, options: MergeOptions = { deepMerge: false }): string {
     let qsObject = QueryString.parse(origQS);
 
-    let newKeys = Object.keys(newValues) as (keyof T)[];
-    for (let key of newKeys) {
-      if (typeof newValues[key] === 'undefined') continue;
-      set(qsObject, key, newValues[key]);
+    if (options.deepMerge) {
+      let newKeys = getObjectPaths(newValues);
+      for (let key of newKeys) {
+        let value = get(newValues, key);
+        set(qsObject, key, value);
+      }
+    } else {
+      let newKeys = Object.keys(newValues) as (keyof T)[];
+      for (let key of newKeys) {
+        set(qsObject, key, newValues[key]);
+      }
     }
 
     qsObject = cleanDeep(qsObject, { emptyStrings: false });

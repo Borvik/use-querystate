@@ -68,6 +68,34 @@ describe('Parsing Tests', () => {
       ]
     });
   });
+
+  test('Convert: ?a=b&c=5&d=1,2,3&e=1&f=skipped', () => {
+    expect(QueryString.parse('?a=b&c=5&d=1,2,3&e=1&f=skipped', {
+      types: {
+        a: 'string',
+        c: 'number',
+        d: 'number[]',
+        e: 'boolean',
+      }
+    })).toMatchObject({
+      a: 'b',
+      c: 5,
+      d: [1, 2, 3],
+      e: true,
+    });
+  });
+
+  test('Convert: ?filter=a,1,1', () => {
+    expect(QueryString.parse('?filter=a,1,1', {
+      definedTuples: true,
+      types: {
+        filter: ['string', 'number', 'boolean']
+      }
+    }))
+    .toMatchObject({
+      filter: ['a', 1, true]
+    });
+  });
 });
 
 describe('Stringify Tests', () => {
@@ -86,12 +114,34 @@ describe('Stringify Tests', () => {
   test('Simple Object', () => {
     expect(QueryString.stringify({a: {b: 'c', d: 'e'}})).toBe('a=(b:c;d:e)');
   });
+});
 
+describe('Merge Tests', () => {
   test('Simple Merge', () => {
     expect(QueryString.merge('a=b', {c: 5})).toBe('a=b&c=5');
   });
 
-  test('Merge Unset', () => {
+  test('Merge Unset (null)', () => {
     expect(QueryString.merge('a=b&c=5', {c: null})).toBe('a=b');
   });
-});
+
+  test('Merge Unset (undefined)', () => {
+    expect(QueryString.merge('a=b&c=5', {c: undefined})).toBe('a=b');
+  });
+
+  test('Deep Merge', () => {
+    expect(QueryString.merge(
+      '?a=(b:c;d:e,f;j:(k:l))',
+      {g:'h', a: {b:'1',m:'o'}},
+      { deepMerge: true }
+    )).toBe('a=(b:1;d:e,f;j:(k:l);m:o)&g=h')
+  });
+
+  test('Deep Unset', () => {
+    expect(QueryString.merge(
+      '?a=(b:c;d:e,f;j:(k:l))',
+      {a: {j: {k: null}}},
+      { deepMerge: true }
+    )).toBe('a=(b:c;d:e,f)')
+  });
+})

@@ -1,4 +1,4 @@
-## Introduction
+# Introduction
 
 Skip to the [format](#format) and [api](#api)
 
@@ -56,7 +56,7 @@ While the browser is the application passing the query string around, it doesn't
 
 > NOTE: Yes, based on all the above I could technically use ANY character for separating and eschew percent encoding in favor of a homebrew method.  In this I tried to follow the RFC as best I could, while taking liberties where it seemed allowed. So when I use a sub-delimiter it is actually a delimiter.
 
-## Format
+# Format
 
 `encodeURIComponent` is used to encode parts - but it needs some help to cover this libraries needs, namely using `+` instead of `%20` for a space, and percent encoding `(` and `)` which it doesn't do natively.  `Boolean` types will be converted to `1` or `0`.
 
@@ -101,27 +101,91 @@ qs = {
 }
 ```
 
-## API
+# API
 
 Examples are in typescript, and assume: `import { QueryString } from '@borvik/querystring';`
 
-### `stringify`
+## `stringify`
 
-```typescript
-let encoded = QueryString.stringify({a: 'b'});
-// encoded = "a=b" - no question mark
-```
+### **Syntax**
+> stringify(obj: object)
+
+#### Parameters
+
+> `obj`\
+> An object to serialize to query string format
+
+### **Description**
 
 Serializes an object to the query string format.
 
 This can handle nested objects and arrays, skipping `functions`, `Symbols`, `null` and `undefined`.
 
-### `parse`
+Does not prefix the query string with a question mark.
+
+### **Examples**
 
 ```typescript
-let decoded = QueryString.parse('?a=b&c=5');
-// decoded = {a: 'b', c: '5'}
+let encoded = QueryString.stringify({a: 'b'});
+// encoded = "a=b"
 ```
+
+## `parse`
+
+### **Syntax**
+> parse(qs: string[, options: ParseOptions])
+
+#### Parameters
+
+> `qs`\
+> A string containing the query string to parse.
+
+> `options`\
+> Parse options to allow transforming the data to proper types\
+> \
+> `types`: An object containing the type definitions for the query string. Conversion will only be run if this is specified. See below for structure.\
+> `definedTuples`: Boolean indicating whether `types` contains definitions for array indicies.
+
+The type definition object should mirror that of the expected input. When using this conversion feature it locks the query string to the expected definition. Missing key/values are fine, but _extra_ key/values are discarded silently. Useful if you only want _part_ of the query string.
+
+#### Return value
+
+Returns an object containing the values parsed from the query string, or if there was no query string an empty object.
+
+#### Definition of `types`
+
+A type definition may be any of `any`, `string`, `number`, `bigint`, `boolean`, `string[]`, `number[]`, `bigint[]`, or `boolean[]`.
+
+Some example type definitions, first will show the query string, followed by a type definition.
+
+```typescript
+// ?page=1&pageSize=10
+const typeDef = {
+  page: 'number',
+  pageSize: 'number'
+}
+
+// ?ids=1,2,3
+const typeDef = {
+  ids: 'number[]'
+}
+
+// ?filter=(a:1,b:1)
+const typeDef = {
+  filter: {
+    a: 'number',
+    b: 'boolean',
+  }
+}
+
+// ?filter=a,1,1
+const typeDef = {
+  // To use this type of definition you must specify `definedTuples` as `true`
+  filter: ['string', 'number', 'boolean']
+}
+```
+
+### **Description**
 
 Decodes a query string encoded with this format to an object
 
@@ -129,29 +193,77 @@ The leading question mark is optional.\
 Single value arrays are not parseable.\
 All values will be strings.
 
-### `merge`
+### **Examples**
 
 ```typescript
-let merged = QueryString.merge('?a=b&c=1&d=e', {c: 2, d: null});
-// merged = "a=b&c=2"
+let decoded = QueryString.parse('?a=b&c=5');
+// decoded = {a: 'b', c: '5'}
+
+let decoded = QueryString.parse('?a=b&c=5&d=1,2,3&e=1', {
+  types: {
+    a: 'string',
+    c: 'number',
+    d: 'number[]',
+    e: 'boolean',
+  }
+});
+// decoded = {a: 'b', c: 5, d: [1, 2, 3], e: true}
+
+let decoded = QueryString.parse('?filter=a,1,1', {
+  definedTuples: true,
+  types: {
+    filter: ['string', 'number', 'boolean']
+  }
+});
+// decoded = {filter: ['a', 1, true]}
 ```
+
+## `merge`
+
+### **Syntax**
+> merge(origQS: string, newValues: object[, options: MergeOptions])
+
+#### Parameters
+
+> `origQs`\
+> A string containing the original query string to merge new values with
+
+> `newValues`\
+> An object containing new values to add to the query string
+
+> `options`\
+> Optional. A set of options to tell it _how_ to merge\
+> \
+> `deepMerge`: Boolean indicating that you want it to perform a deep merge. Default is `false`
+
+#### Return value
+
+Returns a new query string (not prefixed with a `?`) with the merged values or an empty string.
+
+### **Description**
 
 Merges an existing query string, with new values to form a new query string.
 
 This combines first calling a `parse` on the original, then merging the result with the new values, and finally calling `stringify`.
 
-> Note: This does _**not**_ do a _deep_ merge, the top level properties specified in the new value will completely replace the top level of the query string.
+### Examples
 
-> Note: In the example above setting `d` to `undefined` would not work as that would be skipped from the merge process.
+```typescript
+let merged = QueryString.merge('?a=b&c=1&d=e', {c: 2, d: null});
+// merged = "a=b&c=2"
 
-## FAQ
+let merged = QueryString.merge('?a=(b:c;d:e,f;j:(k:l))', {g:'h', a: {b:'1',m:'o',j: {k: null}}}, { deepMerge: true });
+// merged = "a=(b:1;d:e,f;m:o)&g=h"
+```
 
-### Why is there no question mark in the `stringify` result (can you add optional parameter)?
+> NOTE: In the `deepMerge` example path `a.j.k` is set to `null`, which leaves `j` an empty object so it too is removed.
 
-This was a design choice. In some cases you might want one, and others you might not. With this usage, in cases where you might want both serialization only happens once and the calling app can fairly easily add/not add the question mark in the appropriate spot.
+# FAQ
+
+### Why is there no question mark in the `stringify` result?
+
+> In some cases you might want one, and others you might not. By not including it, in cases where you might want both (one with `?` and one without), rather than running serialization twice - it only happens once and the calling app can fairly easily add or not add the question mark in the appropriate spot.
 
 ### Can you support arrays with square brackets `[]`?
 
-Probably not going to happen - square brackets are not listed as a sub-delim in the RFC. They _are_ in there as gen-delims, but not for the query string. And while it seems `:` is also that way - note `:` is part of the `pchar` allowed in the query string. Because of this they would have to be percent encoded - which is just harder to read.
-
-At some point I _may_ be persuaded to relax this a bit given the right arguments, but probably never to the point of following the format `?a[]=b`, but rather a format like `?a=[b]&c=[d,e]` to help with single value arrays.
+> Probably not going to happen - square brackets are not listed as a sub-delim in the RFC. They _are_ in there as gen-delims, but not for the query string. And while it seems `:` is also that way - note `:` is part of the `pchar` allowed in the query string. Because of this they would have to be percent encoded - which is just harder to read.
