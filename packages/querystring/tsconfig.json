@@ -21,14 +21,14 @@
     "noImplicitAny": true,
     "jsx": "react",
     "declaration": true,
-    "outDir": "./dist",
-    "noEmit": true
+    "outDir": "./dist"
   },
   "files": [
     "src/index.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/**/*.test.ts"
   ],
   "include": [
     "src/**/*",

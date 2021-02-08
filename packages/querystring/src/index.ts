@@ -8,6 +8,8 @@ import { MergeOptions, ParseOptions } from "./types";
 import { getObjectPaths } from "./pathTree";
 import { convert } from "./convert";
 
+export type { PathTypes } from './types';
+
 export class QueryString {
 
   /**

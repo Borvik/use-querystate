@@ -1,20 +1,30 @@
 {
   "name": "@borvik/querystring",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/index.js",
-  "scripts": {
-    "test": "jest"
-  },
+  "description": "A library for parsing and encoding query string data",
   "author": "Chris Kolkman",
   "license": "MIT",
+  "repository": "github:Borvik/use-querystate",
+  "bugs": {
+    "url": "https://github.com/Borvik/use-querystate/issues"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && npx tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "clean-deep": "~3.4.0",
+    "lodash": "~4.17.20"
+  },
   "devDependencies": {
-    "typescript": "~3.8.3",
-    "jest": "~26.6.3",
-    "ts-jest": "~26.5.0",
     "@types/jest": "~26.0.20",
-    "lodash": "~4.17.20",
     "@types/lodash": "~4.14.168",
-    "clean-deep": "~3.4.0"
+    "jest": "~26.6.3",
+    "rimraf": "~3.0.2",
+    "ts-jest": "~26.5.0",
+    "typescript": "~3.8.3"
   }
 }
