@@ -1,0 +1,17 @@
+{
+  "name": "@borvik/querystring",
+  "entries": [
+    {
+      "version": "1.1.0",
+      "tag": "@borvik/querystring_v1.1.0",
+      "date": "Tue, 09 Feb 2021 12:10:22 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Added initialState capabilities to stringify, parse, and merge"
+          }
+        ]
+      }
+    }
+  ]
+}

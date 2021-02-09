@@ -12,7 +12,7 @@
   "types": "dist/index.d.ts",
   "devDependencies": {
     "@babel/core": "^7.0.0",
-    "@borvik/querystring": "1.0.0",
+    "@borvik/querystring": "1.1.0",
     "@types/jest": "~26.0.20",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",

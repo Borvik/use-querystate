@@ -108,12 +108,17 @@ Examples are in typescript, and assume: `import { QueryString } from '@borvik/qu
 ## `stringify`
 
 ### **Syntax**
-> stringify(obj: object)
+> stringify(obj: object[, options: ParseOptions])
 
 #### Parameters
 
 > `obj`\
 > An object to serialize to query string format
+
+> `options`\
+> Parse options to allow transforming the data to proper types\
+> \
+> `initialState?`: `Record<string, unknown>` Contains the initial or default state the query string holds when an expected var shouldn't exist. If a path exists in both `intialState` _and_ `obj` and the values are `equal` (strict) then the value is omitted from the serialized query string.
 
 ### **Description**
 
@@ -128,6 +133,11 @@ Does not prefix the query string with a question mark.
 ```typescript
 let encoded = QueryString.stringify({a: 'b'});
 // encoded = "a=b"
+
+let encoded = QueryString.stringify({page: 1, q: 'query'}, {
+  initialState: { page: 1 }
+});
+// encoded = "q=query"
 ```
 
 ## `parse`
@@ -143,8 +153,9 @@ let encoded = QueryString.stringify({a: 'b'});
 > `options`\
 > Parse options to allow transforming the data to proper types\
 > \
-> `types`: An object containing the type definitions for the query string. Conversion will only be run if this is specified. See below for structure.\
-> `definedTuples`: Boolean indicating whether `types` contains definitions for array indicies.
+> `types?`: An object containing the type definitions for the query string. Conversion will only be run if this is specified. See below for structure.\
+> `definedTuples?`: Boolean indicating whether `types` contains definitions for array indicies.\
+> `initialState?`: `Record<string, unknown>` Contains the initial or default state the query string holds when an expected var doesn't exist. If `types` are not defined, they can partly be derived from this.
 
 The type definition object should mirror that of the expected input. When using this conversion feature it locks the query string to the expected definition. Missing key/values are fine, but _extra_ key/values are discarded silently. Useful if you only want _part_ of the query string.
 
@@ -216,6 +227,16 @@ let decoded = QueryString.parse('?filter=a,1,1', {
   }
 });
 // decoded = {filter: ['a', 1, true]}
+
+let decoded = QueryString.parse('?a=b&c=5&e=1', {
+  initialState: {
+    a: 'd',
+    c: 2,
+    e: false
+  }
+});
+// decoded = {a: 'b', c: 5, e: true}
+// note - values of initialState aren't important, but types are
 ```
 
 ## `merge`
@@ -234,7 +255,8 @@ let decoded = QueryString.parse('?filter=a,1,1', {
 > `options`\
 > Optional. A set of options to tell it _how_ to merge\
 > \
-> `deepMerge`: Boolean indicating that you want it to perform a deep merge. Default is `false`
+> `deepMerge`: Boolean indicating that you want it to perform a deep merge. Default is `false`\
+> `initialState?`: `Record<string, unknown>` Contains the initial or default state the query string holds when an expected var shouldn't exist. If a path exists in both `intialState` _and_ combined `origQs` and the values are `equal` (strict) then the value is omitted from the serialized query string. **Note:** This applies to incoming `newValues` only.
 
 #### Return value
 
@@ -254,6 +276,11 @@ let merged = QueryString.merge('?a=b&c=1&d=e', {c: 2, d: null});
 
 let merged = QueryString.merge('?a=(b:c;d:e,f;j:(k:l))', {g:'h', a: {b:'1',m:'o',j: {k: null}}}, { deepMerge: true });
 // merged = "a=(b:1;d:e,f;m:o)&g=h"
+
+let merged = QueryString.merge('?page=5&pageSize=10', { page: 1 }, {
+  initialState: { page: 1, pageSize: 25 }
+});
+// merged = "pageSize=10"
 ```
 
 > NOTE: In the `deepMerge` example path `a.j.k` is set to `null`, which leaves `j` an empty object so it too is removed.

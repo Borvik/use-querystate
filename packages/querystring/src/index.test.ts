@@ -69,6 +69,14 @@ describe('Parsing Tests', () => {
     });
   });
 
+  test('?page=2', () => {
+    expect(QueryString.parse('?page=2', { initialState: { page: 1, pageSize: 10 }}))
+      .toMatchObject({
+        page: 2,
+        pageSize: 10
+      });
+  });
+
   test('Convert: ?a=b&c=5&d=1,2,3&e=1&f=skipped', () => {
     expect(QueryString.parse('?a=b&c=5&d=1,2,3&e=1&f=skipped', {
       types: {
@@ -114,6 +122,19 @@ describe('Stringify Tests', () => {
   test('Simple Object', () => {
     expect(QueryString.stringify({a: {b: 'c', d: 'e'}})).toBe('a=(b:c;d:e)');
   });
+
+  test('Set with init', () => {
+    expect(QueryString.stringify({page: 1, q: 'query'}, {
+      initialState: { page: 1 }
+    })).toBe('q=query');
+    
+  });
+
+  test('Set with init (empty)', () => {
+    expect(QueryString.stringify({page: 1, pageSize: 10}, { initialState: { page: 1, pageSize: 10 }})).toBe('');
+  });
+
+  
 });
 
 describe('Merge Tests', () => {
@@ -144,4 +165,12 @@ describe('Merge Tests', () => {
       { deepMerge: true }
     )).toBe('a=(b:c;d:e,f)')
   });
-})
+
+  test('Merge with Initial State', () => {
+    expect(QueryString.merge(
+      '?page=5&pageSize=10',
+      { page: 1 },
+      { initialState: { page: 1, pageSize: 25 }}
+    )).toBe('pageSize=10');
+  });
+});
