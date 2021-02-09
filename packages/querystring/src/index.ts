@@ -4,9 +4,14 @@ import { isset, isStringable } from "./isset";
 import cleanDeep from 'clean-deep';
 import set from 'lodash/set';
 import get from 'lodash/get';
-import { MergeOptions, ParseOptions } from "./types";
+import unset from 'lodash/unset';
+import defaultsDeep from 'lodash/defaultsDeep';
+import cloneDeep from 'lodash/cloneDeep';
+import { MergeOptions, ParseOptions, StringifyOptions } from "./types";
 import { getObjectPaths } from "./pathTree";
 import { convert } from "./convert";
+import { buildTypeDefs } from "./buildTypeDefs";
+import { isEqual } from "./isEqual";
 
 export type { PathTypes } from './types';
 
@@ -16,8 +21,24 @@ export class QueryString {
    * Serializes an object to the query string format
    * 
    * @param obj Object to serialize to query string format
+   * @param options Stringify options to influence how the data is stringified
    */
-  static stringify<T extends {}>(obj: T): string {
+  static stringify<T extends {}>(obj: T, options: StringifyOptions = {}): string {
+    let objToStringify: unknown = cloneDeep(obj);
+    if (!!options.initialState) {
+      let statePaths = getObjectPaths(options.initialState);
+      for (let pathKey of statePaths) {
+        let curValue = get(objToStringify, pathKey, undefined);
+        if (typeof curValue === 'undefined' || curValue === null)
+          continue;
+        
+        let initValue = get(options.initialState, pathKey);
+        if (isEqual(curValue, initValue))
+          unset(objToStringify, pathKey);
+      }
+    }
+    objToStringify = cleanDeep(objToStringify, { emptyStrings: false });
+
     let seenObjects: any[] = [];
 
     function doStringify(obj: unknown, nested: boolean): string {
@@ -78,7 +99,7 @@ export class QueryString {
       }
     }
     
-    return doStringify(obj, false);
+    return doStringify(objToStringify, false);
   }
 
   /**
@@ -89,7 +110,7 @@ export class QueryString {
    */
   static parse(qs: string, options: ParseOptions = {}): Record<string, unknown> {
     qs = (qs ?? '').trim();
-    if (!qs || qs === '?') return {};
+    if (!qs || qs === '?') return options.initialState ?? {};
     if (qs[0] === '?') qs = qs.substr(1);
 
     let result: Record<string, unknown> = {};
@@ -142,9 +163,18 @@ export class QueryString {
       result[decode(key)] = parseValue(value);
     }
 
-    if (typeof options.types !== 'undefined') {
-      result = convert(result, options.definedTuples ?? false, options.types);
+    // build types (if we can)
+    let typeDefs = options.types;
+    if (!typeDefs && !!options.initialState) {
+      typeDefs = buildTypeDefs(options.initialState);
     }
+
+    if (typeof typeDefs !== 'undefined') {
+      result = convert(result, options.definedTuples ?? false, typeDefs);
+    }
+
+    if (options.initialState)
+      result = defaultsDeep(result, options.initialState);
     return result;
   }
 
@@ -171,7 +201,10 @@ export class QueryString {
       }
     }
 
-    qsObject = cleanDeep(qsObject, { emptyStrings: false });
-    return QueryString.stringify(qsObject);
+    let qsOptions: StringifyOptions = {};
+    if (options.initialState)
+      qsOptions.initialState = options.initialState;
+
+    return QueryString.stringify(qsObject, qsOptions);
   }
 }

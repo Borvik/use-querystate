@@ -17,8 +17,14 @@ export interface PathTypes {
 export interface ParseOptions {
   types?: PathTypes
   definedTuples?: boolean
+  initialState?: Record<string, unknown>
 }
 
 export interface MergeOptions {
   deepMerge?: boolean
+  initialState?: Record<string, unknown>
+}
+
+export interface StringifyOptions {
+  initialState?: Record<string, unknown>
 }
