@@ -14,17 +14,17 @@ export interface PathTypes {
   [x: string]: validQSTypes | validQSTypes[] | PathTypes
 }
 
-export interface ParseOptions {
+export interface ParseOptions<T extends object> {
   types?: PathTypes
   definedTuples?: boolean
-  initialState?: Record<string, unknown>
+  initialState?: T
 }
 
-export interface MergeOptions {
+export interface MergeOptions<T extends object> {
   deepMerge?: boolean
-  initialState?: Record<string, unknown>
+  initialState?: T
 }
 
-export interface StringifyOptions {
-  initialState?: Record<string, unknown>
+export interface StringifyOptions<T extends object> {
+  initialState?: T
 }

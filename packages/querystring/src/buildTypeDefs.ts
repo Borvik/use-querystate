@@ -3,7 +3,7 @@ import { isValidQSType, PathTypes } from "./types";
 import get from 'lodash/get';
 import set from 'lodash/set';
 
-export function buildTypeDefs(initialState: Record<string, unknown>): PathTypes {
+export function buildTypeDefs<T extends object>(initialState: T): PathTypes {
   let dataTypes: PathTypes = {};
 
   let statePaths = getObjectPaths(initialState);
