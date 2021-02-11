@@ -1,4 +1,4 @@
-import { convert } from './index';
+import { convert } from '../src/convert/index';
 
 describe('Conversion tests', () => {
   test('Basic Conversions', () => {

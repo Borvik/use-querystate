@@ -1,4 +1,4 @@
-import { QueryString } from './index';
+import { QueryString } from '../src/index';
 
 describe('Parsing Tests', () => {
   test('Empty Query String', () => {
