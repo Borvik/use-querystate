@@ -4,7 +4,7 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "es2016"
+      "es2020"
     ],
     "allowJs": true,
     "sourceMap": true,
@@ -27,9 +27,9 @@
   "files": [
     "src/lib/index.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ],
+  // "exclude": [
+  //   "node_modules"
+  // ],
   "include": [
     "src/lib/**/*",
   ]

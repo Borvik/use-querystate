@@ -1,0 +1,8 @@
+.rush/
+node_modules/
+src/
+__tests__/
+jest.config.js
+package-lock.json
+tsconfig.json
+webpack.config.json

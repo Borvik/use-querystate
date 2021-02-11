@@ -12,7 +12,7 @@
   "types": "dist/index.d.ts",
   "devDependencies": {
     "@babel/core": "^7.0.0",
-    "@borvik/querystring": "1.1.0",
+    "@borvik/querystring": "^1.1.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@types/jest": "~26.0.20",
@@ -50,6 +50,7 @@
     "@types/history": "~4.7.8"
   },
   "peerDependencies": {
+    "@borvik/querystring": "^1.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2"

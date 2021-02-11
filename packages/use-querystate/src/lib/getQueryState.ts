@@ -2,7 +2,19 @@ import { QueryString } from '@borvik/querystring';
 import { QueryStateOptions } from "./types";
 
 export function getQueryState<State extends object>(queryString: string, initialState: State, options?: QueryStateOptions): State {
-  let qsObject = QueryString.parse(queryString, { initialState });
+  let typeDefs = options?.types;
+  if (!!typeDefs && !!options?.prefix) {
+    typeDefs = {
+      [options.prefix]: typeDefs
+    };
+  }
+
+  let qsObject = QueryString.parse(queryString, {
+    initialState: !options?.prefix
+      ? initialState
+      : { [options.prefix]: initialState },
+    types: typeDefs
+  });
   let queryState: State = {} as State;
   
   if (!!options?.prefix) {

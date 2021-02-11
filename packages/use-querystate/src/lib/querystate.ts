@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useDebugValue, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { getQueryState } from './getQueryState';
 import { QueryStateOptions } from "./types";
@@ -70,5 +70,6 @@ export function useQueryState<State extends object>(initialState: State, options
     });
   };
 
+  useDebugValue(currPublicState);
   return [currPublicState, publicSetState];
 }
