@@ -71,7 +71,6 @@ export function useQueryState<State extends object>(initialState: State, options
       localRef.current = { init: true, publicState, search: newQS };
       setRerender(v => 0 - v); // toggle's between 1 and -1
     }
-    // return { init: true, publicState, search: newQS };
   }, [localState, setRerender, useInternalState, prefix, history, location, derivedInitialState]);
 
   useDebugValue(currPublicState);
