@@ -13,10 +13,11 @@ export function getQueryState<State extends object>(queryString: string, initial
     initialState: !options?.prefix
       ? initialState
       : { [options.prefix]: initialState },
-    types: typeDefs
+    types: typeDefs,
+    lockTypesToInitialState: true,
   });
   let queryState: State = {} as State;
-  
+
   if (!!options?.prefix) {
     queryState = (qsObject[options.prefix] ?? {}) as State;
   } else {

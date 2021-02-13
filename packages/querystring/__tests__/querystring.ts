@@ -104,6 +104,31 @@ describe('Parsing Tests', () => {
       filter: ['a', 1, true]
     });
   });
+
+  test('Filtered: ?pageSize=50', () => {
+    expect(QueryString.parse('?pageSize=50', {
+      types: {
+        page: 'number'
+      }
+    })).toEqual({});
+  });
+
+  test('Unfiltered: ?pageSize=50', () => {
+    expect(QueryString.parse('?pageSize=50', {
+      initialState: {
+        page: 1
+      }
+    })).toEqual({page: 1, pageSize: '50'});
+  });
+
+  test('Filtered by initial: ?pageSize=50', () => {
+    expect(QueryString.parse('?pageSize=50', {
+      initialState: {
+        page: 1
+      },
+      lockTypesToInitialState: true,
+    })).toEqual({page: 1});
+  });
 });
 
 describe('Stringify Tests', () => {

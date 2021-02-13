@@ -1,4 +1,4 @@
-import { useDebugValue, useState } from 'react';
+import { useCallback, useDebugValue, useRef, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { getQueryState } from './getQueryState';
 import { QueryStateOptions } from "./types";
@@ -7,68 +7,72 @@ import { useDeepDerivedState } from './useDeepDerivedState';
 import { BATCHING_UPDATES, performBatchedUpdate } from './batchUpdates';
 import { getQueryString } from './getQueryString';
 
+type LocalState<State> = {init: false} | {init: true, publicState: State, search: string};
+type NewState<State> = (Partial<State> | ((state: State) => Partial<State>));
+
 export function useQueryState<State extends object>(initialState: State, options?: QueryStateOptions): [State, (newState: Partial<State> | ((state: State) => Partial<State>)) => void] {
-  const [localState, setLocalState] = useState<{init: false} | {init: true, publicState: State, search: string}>({init: false});
+  const [,setRerender] = useState(1);
+  const localRef = useRef<LocalState<State>>({init: false});
   const location = useLocation();
   const history = useHistory();
 
   let currPublicState: State;
-  if (!localState.init || (!options?.internalState && location.search !== localState.search)) {
+  if (!localRef.current.init || (!options?.internalState && location.search !== localRef.current.search)) {
     let potentialPublicState = options?.internalState
       ? initialState
       : getQueryState(location.search, initialState, options);
 
-    if (!localState.init || !isEqual(localState.publicState, potentialPublicState)) {
+    if (!localRef.current.init || !isEqual(localRef.current.publicState, potentialPublicState)) {
       currPublicState = potentialPublicState;
     } else {
-      currPublicState = localState.publicState;
+      currPublicState = localRef.current.publicState;
     }
 
-    setLocalState({
+    localRef.current = {
       init: true,
       publicState: currPublicState,
       search: location.search,
-    });
+    };
   } else {
-    currPublicState = localState.publicState;
+    currPublicState = localRef.current.publicState;
   }
 
   // derive state so reference can be the same
   let [derivedInitialState] = useDeepDerivedState(() => { return initialState; }, [initialState]);
 
-  const publicSetState = (newState: (Partial<State> | ((state: State) => Partial<State>))) => {
-    setLocalState(localState => {
-      if (!localState.init) throw new Error('Set Query State called before it was initialized');
+  const localState = localRef.current;
+  const { internalState: useInternalState, prefix } = options ?? {};
+  const publicSetState = useCallback((newState: NewState<State>) => {
+    if (!localState.init) throw new Error('Set Query State called before it was initialized');
 
-      /**
-       * get FULL qs, and update it
-       */
-      const mergeState = typeof newState === 'function'
-        ? (newState as any)(localState.publicState)
-        : newState;
+    /**
+     * get FULL qs, and update it
+     */
+    const mergeState = typeof newState === 'function'
+      ? (newState as any)(localState.publicState)
+      : newState;
 
-      const publicState = { ...localState.publicState, ...mergeState };
+    const publicState = { ...localState.publicState, ...mergeState };
 
-      if (BATCHING_UPDATES.current && !options?.internalState) {
-        performBatchedUpdate(history, location, publicState, derivedInitialState, options?.prefix);
-        return localState;
-      }
+    if (BATCHING_UPDATES.current && !useInternalState) {
+      performBatchedUpdate(history, location, mergeState, derivedInitialState, prefix);
+      return;
+    }
 
-      let newQS = getQueryString(location.search, publicState, derivedInitialState, options?.prefix);
-      if (!options?.internalState) {
-        setImmediate(() => {
-          // TODO: Remove console after testing
-          console.log('HISTORY UPDATING:', newQS);
-          history.push({
-            ...location,
-            search: newQS
-          });
+    let newQS = getQueryString(location.search, publicState, derivedInitialState, prefix);
+    if (!useInternalState) {
+      setImmediate(() => {
+        history.push({
+          ...location,
+          search: newQS
         });
-      }
-
-      return { init: true, publicState, search: newQS };
-    });
-  };
+      });
+    } else {
+      localRef.current = { init: true, publicState, search: newQS };
+      setRerender(v => 0 - v); // toggle's between 1 and -1
+    }
+    // return { init: true, publicState, search: newQS };
+  }, [localState, setRerender, useInternalState, prefix, history, location, derivedInitialState]);
 
   useDebugValue(currPublicState);
   return [currPublicState, publicSetState];

@@ -18,6 +18,7 @@ export interface ParseOptions<T extends object> {
   types?: PathTypes
   definedTuples?: boolean
   initialState?: T
+  lockTypesToInitialState?: boolean
 }
 
 export interface MergeOptions<T extends object> {

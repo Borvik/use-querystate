@@ -21,16 +21,14 @@ export function performBatchedUpdate(history: HistoryType, location: LocationDes
   batchUpdateLoc.search = newQS;
 }
 
-export function batchedQSUpdate(fn: Function) {
+export function batchedQSUpdate(cb: Function) {
   BATCHING_UPDATES.current = true;
 
-  fn();
+  cb();
   
   BATCHING_UPDATES.current = false;
 
   if (batchedHistoryObj) {
-    // TODO: Remove console after testing
-    console.log('HISTORY UPDATING (batch):', batchUpdateLoc?.search);
     batchedHistoryObj.push(batchUpdateLoc!);
   }
 

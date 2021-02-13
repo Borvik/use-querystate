@@ -170,7 +170,12 @@ export class QueryString {
     }
 
     if (typeof typeDefs !== 'undefined') {
-      result = convert(result, options.definedTuples ?? false, typeDefs);
+      result = convert(
+        result,
+        options.definedTuples ?? false,
+        typeDefs,
+        (!!typeDefs && !options.types && !options.lockTypesToInitialState)
+      );
     }
 
     if (options.initialState)
