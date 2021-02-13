@@ -397,7 +397,7 @@
     {
       "packageName": "@borvik/use-querystate",
       "projectFolder": "packages/use-querystate",
-      "shouldPublish": false
+      "shouldPublish": true
     }
     // {
     //   /**
