@@ -4,7 +4,7 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "es2016"
+      "es2020"
     ],
     "allowJs": true,
     "sourceMap": true,
@@ -21,14 +21,10 @@
     "noImplicitAny": true,
     "jsx": "react",
     "declaration": true,
-    "outDir": "./dist",
-    "noEmit": true
+    "outDir": "./dist"
   },
   "files": [
     "src/lib/index.ts"
-  ],
-  "exclude": [
-    "node_modules"
   ],
   "include": [
     "src/lib/**/*",

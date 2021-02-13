@@ -1,4 +1,4 @@
-import { convert } from './index';
+import { convert } from '../src/convert/index';
 
 describe('Conversion tests', () => {
   test('Basic Conversions', () => {
@@ -22,7 +22,7 @@ describe('Conversion tests', () => {
       l: 'number[]',
       m: 'bigint[]',
       o: 'boolean[]',
-    }))
+    }, true))
     .toMatchObject({
       a: {b:'c'},
       d: 'e',
@@ -41,6 +41,30 @@ describe('Conversion tests', () => {
       a: {
         b: ['number', 'string', 'boolean']
       }
-    })).toMatchObject({a: {b: [1, 'c', true]}});
+    }, true)).toEqual({a: {b: [1, 'c', true]}});
+  });
+
+  test('Filtered by typeDef', () => {
+    expect(convert({pageSize: '50'}, false, {
+      page: 'number'
+    }, false)).toEqual({});
+  });
+
+  test('Filtered by typeDef 2', () => {
+    expect(convert({page: '1', pageSize: '50'}, false, {
+      page: 'number'
+    }, false)).toEqual({page: 1});
+  });
+
+  test('Unfiltered by initial typeDef', () => {
+    expect(convert({pageSize: '50'}, false, {
+      page: 'number'
+    }, true)).toEqual({pageSize: '50'});
+  });
+
+  test('Unfiltered by initial typeDef 2', () => {
+    expect(convert({page: '1', pageSize: '50'}, false, {
+      page: 'number'
+    }, true)).toEqual({page: 1, pageSize: '50'});
   });
 });

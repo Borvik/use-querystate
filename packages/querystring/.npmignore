@@ -1,6 +1,8 @@
+__tests__/
 .rush/
 node_modules/
 src/
 jest.config.js
 package-lock.json
+querystring.build.log
 tsconfig.json

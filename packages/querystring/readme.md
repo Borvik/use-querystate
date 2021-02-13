@@ -156,8 +156,7 @@ let encoded = QueryString.stringify({page: 1, q: 'query'}, {
 > `types?`: An object containing the type definitions for the query string. Conversion will only be run if this is specified. See below for structure.\
 > `definedTuples?`: Boolean indicating whether `types` contains definitions for array indicies.\
 > `initialState?`: `Record<string, unknown>` Contains the initial or default state the query string holds when an expected var doesn't exist. If `types` are not defined, they can partly be derived from this.
-
-The type definition object should mirror that of the expected input. When using this conversion feature it locks the query string to the expected definition. Missing key/values are fine, but _extra_ key/values are discarded silently. Useful if you only want _part_ of the query string.
+> `lockTypesToInitialState?`: Boolean telling the parser to treat the types gleaned from `initialState` as if they were explicitly defined in `types`.
 
 #### Return value
 
@@ -167,7 +166,9 @@ Returns an object containing the values parsed from the query string, or if ther
 
 A type definition may be any of `any`, `string`, `number`, `bigint`, `boolean`, `string[]`, `number[]`, `bigint[]`, or `boolean[]`.
 
-Some example type definitions, first will show the query string, followed by a type definition.
+The type definition object should mirror that of the expected input. When using this conversion feature it locks the query string to the expected definition. Missing key/values are fine, but _extra_ key/values are discarded silently. Useful if you only want _part_ of the query string.
+
+Here are some example type definitions, first will show the query string, followed by a type definition.
 
 ```typescript
 // ?page=1&pageSize=10
@@ -198,11 +199,12 @@ const typeDef = {
 
 ### **Description**
 
-Decodes a query string encoded with this format to an object
+Decodes a query string encoded with this format to an object.
+
+When a `types` definition is supplied the resulting object will not have keys that do not exist in the `types` definition.  However, if the types were generated from the `initialState`, extra fields are ok (except when passing `lockTypesToInitialState`);
 
 The leading question mark is optional.\
-Single value arrays are not parseable.\
-All values will be strings.
+Single value arrays are not parseable.
 
 ### **Examples**
 

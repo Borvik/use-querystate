@@ -1,4 +1,4 @@
-import { getObjectPaths } from './pathTree';
+import { getObjectPaths } from '../src/pathTree';
 
 describe('PathTree Tests', () => {
   test('Path', () => {

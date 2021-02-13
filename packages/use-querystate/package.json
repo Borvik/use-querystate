@@ -1,7 +1,6 @@
 {
   "name": "@borvik/use-querystate",
-  "private": "true",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "license": "MIT",
   "repository": "github:Borvik/use-querystate",
   "bugs": {
@@ -12,7 +11,9 @@
   "types": "dist/index.d.ts",
   "devDependencies": {
     "@babel/core": "^7.0.0",
-    "@borvik/querystring": "1.1.0",
+    "@borvik/querystring": "^1.2.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
     "@types/jest": "~26.0.20",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
@@ -25,6 +26,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.5.2",
     "file-loader": "^6.0.0",
+    "history": "^4.9.0",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.13.1",
     "postcss-loader": "^3.0.0",
@@ -42,18 +44,22 @@
     "webpack-cli": "^3.3.11",
     "webpack-node-externals": "^1.7.2",
     "lodash": "~4.17.20",
-    "@types/lodash": "~4.14.168"
+    "@types/lodash": "~4.14.168",
+    "@testing-library/react-hooks": "~5.0.3",
+    "@types/history": "~4.7.8",
+    "rimraf": "~3.0.2"
   },
   "peerDependencies": {
+    "@borvik/querystring": "^1.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "webpack --mode production",
+    "build": "rimraf dist && npx tsc",
     "build:dev": "webpack --mode development",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

@@ -5,20 +5,22 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 
-export function convert(qsObj: Record<string, unknown>, definedTuples: boolean, typeDef: PathTypes): Record<string, unknown> {
+export function convert(qsObj: Record<string, unknown>, definedTuples: boolean, typeDef: PathTypes, typeDefsFromInitial: boolean): Record<string, unknown> {
   let dataTypes = getPathTypes(typeDef, definedTuples);
   let paths = getObjectPaths(qsObj, definedTuples);
 
-  let convertedObj: Record<string, unknown> = cloneDeep(qsObj);
+  let convertedObj: Record<string, unknown> = typeDefsFromInitial ? cloneDeep(qsObj) : {};
   for (let propPath of paths) {
     let joinedPath = propPath.join('.');
     let value = get(qsObj, propPath, undefined);
 
     if (typeof value !== 'undefined') {
-      let definedType: validQSTypes = dataTypes.get(joinedPath) ?? 'any';
-      let newValue = convertValue(value, definedType);
-      if (typeof newValue !== 'undefined')
-        set(convertedObj, propPath, newValue);
+      let definedType: validQSTypes | undefined = dataTypes.get(joinedPath) ?? (typeDefsFromInitial ? 'any' : undefined);
+      if (definedType) {
+        let newValue = convertValue(value, definedType);
+        if (typeof newValue !== 'undefined')
+          set(convertedObj, propPath, newValue);
+      }
     }
   }
   return convertedObj;

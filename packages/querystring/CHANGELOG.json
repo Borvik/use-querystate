@@ -2,6 +2,18 @@
   "name": "@borvik/querystring",
   "entries": [
     {
+      "version": "1.2.0",
+      "tag": "@borvik/querystring_v1.2.0",
+      "date": "Sat, 13 Feb 2021 20:41:47 GMT",
+      "comments": {
+        "minor": [
+          {
+            "comment": "Fixed filtering to defined types, and added option to filter to initial state."
+          }
+        ]
+      }
+    },
+    {
       "version": "1.1.0",
       "tag": "@borvik/querystring_v1.1.0",
       "date": "Tue, 09 Feb 2021 12:10:22 GMT",

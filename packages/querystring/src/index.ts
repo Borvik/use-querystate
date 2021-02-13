@@ -23,7 +23,7 @@ export class QueryString {
    * @param obj Object to serialize to query string format
    * @param options Stringify options to influence how the data is stringified
    */
-  static stringify<T extends {}>(obj: T, options: StringifyOptions = {}): string {
+  static stringify<T extends object, S extends object>(obj: T, options: StringifyOptions<S> = {}): string {
     let objToStringify: unknown = cloneDeep(obj);
     if (!!options.initialState) {
       let statePaths = getObjectPaths(options.initialState);
@@ -108,7 +108,7 @@ export class QueryString {
    * @param qs Query string to parse to an object
    * @param options Parse options to allow transforming the data to proper types
    */
-  static parse(qs: string, options: ParseOptions = {}): Record<string, unknown> {
+  static parse<T extends object>(qs: string, options: ParseOptions<T> = {}): Record<string, unknown> {
     qs = (qs ?? '').trim();
     if (!qs || qs === '?') return options.initialState ?? {};
     if (qs[0] === '?') qs = qs.substr(1);
@@ -170,7 +170,12 @@ export class QueryString {
     }
 
     if (typeof typeDefs !== 'undefined') {
-      result = convert(result, options.definedTuples ?? false, typeDefs);
+      result = convert(
+        result,
+        options.definedTuples ?? false,
+        typeDefs,
+        (!!typeDefs && !options.types && !options.lockTypesToInitialState)
+      );
     }
 
     if (options.initialState)
@@ -185,7 +190,7 @@ export class QueryString {
    * @param newValues An object containing new values to add to the query string
    * @param options Merge options
    */
-  static merge<T extends {}>(origQS: string, newValues: T, options: MergeOptions = { deepMerge: false }): string {
+  static merge<T extends object, S extends object>(origQS: string, newValues: T, options: MergeOptions<S> = { deepMerge: false }): string {
     let qsObject = QueryString.parse(origQS);
 
     if (options.deepMerge) {
@@ -201,7 +206,7 @@ export class QueryString {
       }
     }
 
-    let qsOptions: StringifyOptions = {};
+    let qsOptions: StringifyOptions<S> = {};
     if (options.initialState)
       qsOptions.initialState = options.initialState;
 
