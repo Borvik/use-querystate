@@ -1,6 +1,13 @@
 # Change Log - @borvik/use-querystate
 
-This log was last generated on Sat, 13 Feb 2021 20:41:47 GMT and should not be manually modified.
+This log was last generated on Sat, 13 Feb 2021 21:29:36 GMT and should not be manually modified.
+
+## 1.0.1
+Sat, 13 Feb 2021 21:29:36 GMT
+
+### Patches
+
+- Update dependencies
 
 ## 1.0.0
 Sat, 13 Feb 2021 20:41:47 GMT

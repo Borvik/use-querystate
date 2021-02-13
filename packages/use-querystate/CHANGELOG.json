@@ -2,6 +2,18 @@
   "name": "@borvik/use-querystate",
   "entries": [
     {
+      "version": "1.0.1",
+      "tag": "@borvik/use-querystate_v1.0.1",
+      "date": "Sat, 13 Feb 2021 21:29:36 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Update dependencies"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.0",
       "tag": "@borvik/use-querystate_v1.0.0",
       "date": "Sat, 13 Feb 2021 20:41:47 GMT",
