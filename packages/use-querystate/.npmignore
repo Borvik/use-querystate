@@ -1,8 +1,8 @@
 .rush/
 node_modules/
+public/
 src/
-__tests__/
-jest.config.js
 package-lock.json
 tsconfig.json
+use-querystate.build.log
 webpack.config.json

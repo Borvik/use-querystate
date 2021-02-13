@@ -46,7 +46,8 @@
     "lodash": "~4.17.20",
     "@types/lodash": "~4.14.168",
     "@testing-library/react-hooks": "~5.0.3",
-    "@types/history": "~4.7.8"
+    "@types/history": "~4.7.8",
+    "rimraf": "~3.0.2"
   },
   "peerDependencies": {
     "@borvik/querystring": "^1.1.0",
@@ -56,7 +57,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "webpack --mode production",
+    "build": "rimraf dist && npx tsc",
     "build:dev": "webpack --mode development",
     "test": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject"
