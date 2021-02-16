@@ -15,6 +15,7 @@ export function getQueryState<State extends object>(queryString: string, initial
       : { [options.prefix]: initialState },
     types: typeDefs,
     lockTypesToInitialState: true,
+    filterToTypeDef: options?.filterToTypeDef
   });
   let queryState: State = {} as State;
 

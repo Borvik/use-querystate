@@ -19,6 +19,7 @@ export interface ParseOptions<T extends object> {
   definedTuples?: boolean
   initialState?: T
   lockTypesToInitialState?: boolean
+  filterToTypeDef?: boolean
 }
 
 export interface MergeOptions<T extends object> {
