@@ -21,17 +21,16 @@ export function useCommonDerivedState<State>(onDepChange: (prevState: State | nu
     currPublicState = localRef.current.publicState;
   }
 
-  const localState = localRef.current;
   const publicSetState = useCallback(
     (newState: (State | ((state: State) => State))) => {
-      if (!localState.init) throw new Error();
+      if (!localRef.current.init) throw new Error();
       const publicState = typeof newState === 'function'
-        ? (newState as any)(localState.publicState) as State
+        ? (newState as any)(localRef.current.publicState) as State
         : newState;
-      localRef.current = { ...localState, publicState };
+      localRef.current = { ...localRef.current, publicState };
       setRerender(v => 0 - v); // toggle's between 1 and -1
     },
-    [ localState ]
+    [ localRef ]
   );
   return [currPublicState, publicSetState];
 }

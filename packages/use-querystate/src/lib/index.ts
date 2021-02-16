@@ -5,3 +5,7 @@ export {
 export {
   batchedQSUpdate
 } from './batchUpdates';
+
+export type {
+  QueryStateOptions
+} from './types';

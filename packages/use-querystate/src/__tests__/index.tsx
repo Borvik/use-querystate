@@ -92,4 +92,29 @@ describe('Parsing Tests', () => {
     expect(qs).toStrictEqual({ page: 3, pageSize: 25 });
     expect(history.location.search).toBe('?page=3&pageSize=25');
   });
+
+  test('Chained Updates', async () => {
+    const result = getHook({ page: 1, pageSize: 10 });
+
+    let [qs, setQsOrig] = result.current;
+    expect(qs).toStrictEqual({ page: 2, pageSize: 10 });
+
+    await act(async () => {
+      setQsOrig(pg => ({ page: pg.page + 1 }));
+    });
+
+    let [qs1, setQs1] = result.current;
+    expect(qs1).toStrictEqual({ page: 3, pageSize: 10 });
+    expect(history.location.search).toBe('?page=3');
+    expect(setQs1).toStrictEqual(setQsOrig);
+
+    await act(async () => {
+      setQs1(pg => ({ page: pg.page + 1 }));
+    });
+
+    let [qs2, setQs2] = result.current;
+    expect(qs2).toStrictEqual({ page: 4, pageSize: 10 });
+    expect(history.location.search).toBe('?page=4');
+    expect(setQs2).toStrictEqual(setQsOrig);
+  });
 });

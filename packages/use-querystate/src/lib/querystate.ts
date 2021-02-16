@@ -40,19 +40,18 @@ export function useQueryState<State extends object>(initialState: State, options
   // derive state so reference can be the same
   let [derivedInitialState] = useDeepDerivedState(() => { return initialState; }, [initialState]);
 
-  const localState = localRef.current;
   const { internalState: useInternalState, prefix } = options ?? {};
   const publicSetState = useCallback((newState: NewState<State>) => {
-    if (!localState.init) throw new Error('Set Query State called before it was initialized');
+    if (!localRef.current.init) throw new Error('Set Query State called before it was initialized');
 
     /**
      * get FULL qs, and update it
      */
     const mergeState = typeof newState === 'function'
-      ? (newState as any)(localState.publicState)
+      ? (newState as any)(localRef.current.publicState)
       : newState;
 
-    const publicState = { ...localState.publicState, ...mergeState };
+    const publicState = { ...localRef.current.publicState, ...mergeState };
 
     if (BATCHING_UPDATES.current && !useInternalState) {
       performBatchedUpdate(history, location, mergeState, derivedInitialState, prefix);
@@ -71,7 +70,7 @@ export function useQueryState<State extends object>(initialState: State, options
       localRef.current = { init: true, publicState, search: newQS };
       setRerender(v => 0 - v); // toggle's between 1 and -1
     }
-  }, [localState, setRerender, useInternalState, prefix, history, location, derivedInitialState]);
+  }, [localRef, setRerender, useInternalState, prefix, derivedInitialState]);
 
   useDebugValue(currPublicState);
   return [currPublicState, publicSetState];

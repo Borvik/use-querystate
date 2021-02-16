@@ -27,6 +27,6 @@
     "src/lib/index.ts"
   ],
   "include": [
-    "src/lib/**/*",
+    "src/lib/**/*"
   ]
 }
