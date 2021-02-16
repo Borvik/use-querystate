@@ -2,6 +2,18 @@
   "name": "@borvik/use-querystate",
   "entries": [
     {
+      "version": "1.0.2",
+      "tag": "@borvik/use-querystate_v1.0.2",
+      "date": "Tue, 16 Feb 2021 03:36:16 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Updated query state setter callback so reference to it is consistent"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.1",
       "tag": "@borvik/use-querystate_v1.0.1",
       "date": "Sat, 13 Feb 2021 21:29:36 GMT",
