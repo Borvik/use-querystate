@@ -117,4 +117,17 @@ describe('Parsing Tests', () => {
     expect(history.location.search).toBe('?page=4');
     expect(setQs2).toStrictEqual(setQsOrig);
   });
+
+  test('Filter Object', async () => {
+    history.push('/?filter=(amount:13;op:lt)');
+    const result = getHook({ filter: null }, {
+      types: {
+        filter: 'any'
+      },
+      filterToTypeDef: true,
+    });
+
+    let [qs] = result.current;
+    expect(qs).toStrictEqual({ filter: { amount: '13', op: 'lt' } });
+  });
 });

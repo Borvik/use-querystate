@@ -174,7 +174,8 @@ export class QueryString {
         result,
         options.definedTuples ?? false,
         typeDefs,
-        (!!typeDefs && !options.types && !options.lockTypesToInitialState)
+        (!!typeDefs && !options.types && !options.lockTypesToInitialState),
+        options.filterToTypeDef ?? false
       );
     }
 

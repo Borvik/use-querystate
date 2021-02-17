@@ -129,6 +129,15 @@ describe('Parsing Tests', () => {
       lockTypesToInitialState: true,
     })).toEqual({page: 1});
   });
+
+  test('Basic filter: ?filter=(amount:13;op:lt)', () => {
+    expect(QueryString.parse('?filter=(amount:13;op:lt)', {
+      types: {
+        filter: 'any',
+      },
+      filterToTypeDef: true,
+    })).toEqual({ filter: { amount: '13', op: 'lt' }})
+  });
 });
 
 describe('Stringify Tests', () => {

@@ -22,7 +22,7 @@ describe('Conversion tests', () => {
       l: 'number[]',
       m: 'bigint[]',
       o: 'boolean[]',
-    }, true))
+    }, true, false))
     .toMatchObject({
       a: {b:'c'},
       d: 'e',
@@ -41,30 +41,30 @@ describe('Conversion tests', () => {
       a: {
         b: ['number', 'string', 'boolean']
       }
-    }, true)).toEqual({a: {b: [1, 'c', true]}});
+    }, true, false)).toEqual({a: {b: [1, 'c', true]}});
   });
 
-  test('Filtered by typeDef', () => {
+  test('Filtered by typeDef from initial', () => {
     expect(convert({pageSize: '50'}, false, {
       page: 'number'
-    }, false)).toEqual({});
+    }, false, false)).toEqual({});
   });
 
-  test('Filtered by typeDef 2', () => {
+  test('Filtered by typeDef 2 from initial', () => {
     expect(convert({page: '1', pageSize: '50'}, false, {
       page: 'number'
-    }, false)).toEqual({page: 1});
+    }, false, false)).toEqual({page: 1});
   });
 
   test('Unfiltered by initial typeDef', () => {
     expect(convert({pageSize: '50'}, false, {
       page: 'number'
-    }, true)).toEqual({pageSize: '50'});
+    }, true, false)).toEqual({pageSize: '50'});
   });
 
   test('Unfiltered by initial typeDef 2', () => {
     expect(convert({page: '1', pageSize: '50'}, false, {
       page: 'number'
-    }, true)).toEqual({page: 1, pageSize: '50'});
+    }, true, false)).toEqual({page: 1, pageSize: '50'});
   });
 });
