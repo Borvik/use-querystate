@@ -1,6 +1,13 @@
 # Change Log - @borvik/use-querystate
 
-This log was last generated on Tue, 16 Feb 2021 03:36:16 GMT and should not be manually modified.
+This log was last generated on Wed, 17 Feb 2021 02:43:53 GMT and should not be manually modified.
+
+## 1.1.0
+Wed, 17 Feb 2021 02:43:53 GMT
+
+### Minor changes
+
+- Added filter to typedef without specifying initial
 
 ## 1.0.2
 Tue, 16 Feb 2021 03:36:16 GMT
