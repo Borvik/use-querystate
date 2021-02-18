@@ -1,6 +1,13 @@
 # Change Log - @borvik/querystring
 
-This log was last generated on Wed, 17 Feb 2021 02:43:53 GMT and should not be manually modified.
+This log was last generated on Thu, 18 Feb 2021 11:46:16 GMT and should not be manually modified.
+
+## 2.0.0
+Thu, 18 Feb 2021 11:46:16 GMT
+
+### Breaking changes
+
+- Switched build option for module from esnext to CommonJS for better compatibility - _may_ change how it's imported
 
 ## 1.3.0
 Wed, 17 Feb 2021 02:43:53 GMT
