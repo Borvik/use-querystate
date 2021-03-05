@@ -1,6 +1,6 @@
 {
   "name": "@borvik/use-querystate",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "MIT",
   "repository": "github:Borvik/use-querystate",
   "bugs": {
@@ -52,7 +52,7 @@
     "ts-node": "~9.1.1"
   },
   "dependencies": {
-    "@borvik/querystring": "^2.0.0"
+    "@borvik/querystring": "^2.0.1"
   },
   "peerDependencies": {
     "react": "^16.13.1",

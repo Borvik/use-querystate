@@ -2,6 +2,18 @@
   "name": "@borvik/querystring",
   "entries": [
     {
+      "version": "2.0.1",
+      "tag": "@borvik/querystring_v2.0.1",
+      "date": "Fri, 05 Mar 2021 12:45:44 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "remove sourcemaps from build"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.0.0",
       "tag": "@borvik/querystring_v2.0.0",
       "date": "Thu, 18 Feb 2021 11:46:16 GMT",

@@ -1,6 +1,13 @@
 # Change Log - @borvik/querystring
 
-This log was last generated on Thu, 18 Feb 2021 11:46:16 GMT and should not be manually modified.
+This log was last generated on Fri, 05 Mar 2021 12:45:44 GMT and should not be manually modified.
+
+## 2.0.1
+Fri, 05 Mar 2021 12:45:44 GMT
+
+### Patches
+
+- remove sourcemaps from build
 
 ## 2.0.0
 Thu, 18 Feb 2021 11:46:16 GMT

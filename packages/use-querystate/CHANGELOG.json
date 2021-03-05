@@ -2,6 +2,23 @@
   "name": "@borvik/use-querystate",
   "entries": [
     {
+      "version": "2.0.1",
+      "tag": "@borvik/use-querystate_v2.0.1",
+      "date": "Fri, 05 Mar 2021 12:45:44 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "remove setImmediate, and sourcemaps"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@borvik/querystring\" from `^2.0.0` to `^2.0.1`"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.0.0",
       "tag": "@borvik/use-querystate_v2.0.0",
       "date": "Thu, 18 Feb 2021 11:46:16 GMT",
