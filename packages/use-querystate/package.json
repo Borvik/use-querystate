@@ -61,7 +61,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "rimraf dist && npx tsc",
+    "build": "rimraf dist && npx tsc -p tsconfig.prod.json",
     "build:dev": "webpack --mode development",
     "test": "jest",
     "eject": "react-scripts eject"
