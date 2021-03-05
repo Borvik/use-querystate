@@ -60,16 +60,16 @@ export function useQueryState<State extends object>(initialState: State, options
 
     let newQS = getQueryString(location.search, publicState, derivedInitialState, prefix);
     if (!useInternalState) {
-      setImmediate(() => {
-        history.push({
-          ...location,
-          search: newQS
-        });
+      history.push({
+        ...location,
+        search: newQS
       });
     } else {
       localRef.current = { init: true, publicState, search: newQS };
       setRerender(v => 0 - v); // toggle's between 1 and -1
     }
+    // eslint warns about including `history` and `location` not being included, except that actually _breaks_ functionality
+    // eslint-disable-next-line
   }, [localRef, setRerender, useInternalState, prefix, derivedInitialState]);
 
   useDebugValue(currPublicState);
