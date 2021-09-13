@@ -2,6 +2,18 @@
   "name": "@borvik/use-querystate",
   "entries": [
     {
+      "version": "2.0.2",
+      "tag": "@borvik/use-querystate_v2.0.2",
+      "date": "Mon, 13 Sep 2021 17:53:25 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fix useQuery when used multiple times and added unit tests for them"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.0.1",
       "tag": "@borvik/use-querystate_v2.0.1",
       "date": "Fri, 05 Mar 2021 12:45:44 GMT",

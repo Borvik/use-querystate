@@ -1,6 +1,13 @@
 # Change Log - @borvik/use-querystate
 
-This log was last generated on Fri, 05 Mar 2021 12:45:44 GMT and should not be manually modified.
+This log was last generated on Mon, 13 Sep 2021 17:53:25 GMT and should not be manually modified.
+
+## 2.0.2
+Mon, 13 Sep 2021 17:53:25 GMT
+
+### Patches
+
+- Fix useQuery when used multiple times and added unit tests for them
 
 ## 2.0.1
 Fri, 05 Mar 2021 12:45:44 GMT
