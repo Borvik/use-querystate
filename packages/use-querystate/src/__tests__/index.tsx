@@ -130,4 +130,81 @@ describe('Parsing Tests', () => {
     let [qs] = result.current;
     expect(qs).toStrictEqual({ filter: { amount: '13', op: 'lt' } });
   });
+
+  test('Multi-Hook', async () => {
+    history.push('/?page=2');
+    const pageHook = getHook({ page: 1, pageSize: 10 });
+    const sortHook = getHook({ sort: [] as string[] }, {
+      types: {
+        sort: 'string[]',
+      }
+    });
+
+    let [pageQs, setPageQs] = pageHook.current;
+    expect(pageQs).toStrictEqual({ page: 2, pageSize: 10 });
+
+    let [sortQs, setSortQs] = sortHook.current;
+    expect(sortQs).toStrictEqual({ sort: [] });
+
+    await act(async () => {
+      setSortQs({ sort: ['name asc'] });
+    });
+
+    let [pageQs1] = pageHook.current;
+    expect(pageQs1).toStrictEqual({ page: 2, pageSize: 10 });
+
+    let [sortQs1] = sortHook.current;
+    expect(sortQs1).toStrictEqual({ sort: ['name asc'] });
+    expect(history.location.search).toBe('?page=2&sort=name+asc');
+
+    await act(async () => {
+      setPageQs({ page: 3 });
+    });
+
+    let [pageQs2] = pageHook.current;
+    expect(pageQs2).toStrictEqual({ page: 3, pageSize: 10 });
+
+    let [sortQs2] = sortHook.current;
+    expect(sortQs2).toStrictEqual({ sort: ['name asc'] });
+    expect(history.location.search).toBe('?page=3&sort=name+asc');
+  });
+
+  test('Multi-Hook (batch)', async () => {
+    history.push('/?page=2');
+    const pageHook = getHook({ page: 1, pageSize: 10 });
+    const sortHook = getHook({ sort: [] as string[] }, {
+      types: {
+        sort: 'string[]',
+      }
+    });
+
+    let [pageQs, setPageQs] = pageHook.current;
+    expect(pageQs).toStrictEqual({ page: 2, pageSize: 10 });
+
+    let [sortQs, setSortQs] = sortHook.current;
+    expect(sortQs).toStrictEqual({ sort: [] });
+
+    await act(async () => {
+      setSortQs({ sort: ['name asc'] });
+    });
+
+    let [pageQs1] = pageHook.current;
+    expect(pageQs1).toStrictEqual({ page: 2, pageSize: 10 });
+
+    let [sortQs1] = sortHook.current;
+    expect(sortQs1).toStrictEqual({ sort: ['name asc'] });
+    expect(history.location.search).toBe('?page=2&sort=name+asc');
+
+    batchedQSUpdate(() => {
+      setPageQs({ page: 3 });
+      setPageQs({ pageSize: 25 });
+    });
+
+    let [pageQs2] = pageHook.current;
+    expect(pageQs2).toStrictEqual({ page: 3, pageSize: 25 });
+
+    let [sortQs2] = sortHook.current;
+    expect(sortQs2).toStrictEqual({ sort: ['name asc'] });
+    expect(history.location.search).toBe('?page=3&sort=name+asc&pageSize=25');
+  });
 });

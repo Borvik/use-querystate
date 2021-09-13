@@ -54,11 +54,11 @@ export function useQueryState<State extends object>(initialState: State, options
     const publicState = { ...localRef.current.publicState, ...mergeState };
 
     if (BATCHING_UPDATES.current && !useInternalState) {
-      performBatchedUpdate(history, location, mergeState, derivedInitialState, prefix);
+      performBatchedUpdate(history, history.location, mergeState, derivedInitialState, prefix);
       return;
     }
 
-    let newQS = getQueryString(location.search, publicState, derivedInitialState, prefix);
+    let newQS = getQueryString(history.location.search, publicState, derivedInitialState, prefix);
     if (!useInternalState) {
       history.push({
         ...location,

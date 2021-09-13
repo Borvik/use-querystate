@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@borvik/use-querystate",
+      "comment": "Fix useQuery when used multiple times and added unit tests for them",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@borvik/use-querystate",
+  "email": "chris@spectrumnetdesigns.com"
+}
