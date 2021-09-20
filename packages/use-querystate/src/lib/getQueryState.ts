@@ -1,7 +1,7 @@
 import { QueryString } from '@borvik/querystring';
-import { QueryStateOptions } from "./types";
+import { DeepNullable, QueryStateOptions } from "./types";
 
-export function getQueryState<State extends object>(queryString: string, initialState: State, options?: QueryStateOptions): State {
+export function getQueryState<State extends object>(queryString: string, initialState: State, options?: QueryStateOptions): DeepNullable<State> {
   let typeDefs = options?.types;
   if (!!typeDefs && !!options?.prefix) {
     typeDefs = {
@@ -17,12 +17,12 @@ export function getQueryState<State extends object>(queryString: string, initial
     lockTypesToInitialState: true,
     filterToTypeDef: options?.filterToTypeDef
   });
-  let queryState: State = {} as State;
+  let queryState: DeepNullable<State> = {} as DeepNullable<State>;
 
   if (!!options?.prefix) {
-    queryState = (qsObject[options.prefix] ?? {}) as State;
+    queryState = (qsObject[options.prefix] ?? {}) as DeepNullable<State>;
   } else {
-    queryState = qsObject as State;
+    queryState = qsObject as DeepNullable<State>;
   }
 
   return queryState;

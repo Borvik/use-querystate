@@ -6,3 +6,11 @@ export interface QueryStateOptions {
   types?: PathTypes;
   filterToTypeDef?: boolean;
 }
+
+export type DeepNullable<T> = {
+  [P in keyof T]: T[P] extends (infer U)[]
+    ? DeepNullable<U>[]
+    : T[P] extends Readonly<infer U>[]
+      ? Readonly<DeepNullable<U> | null>[]
+      : DeepNullable<T[P]> | null
+};

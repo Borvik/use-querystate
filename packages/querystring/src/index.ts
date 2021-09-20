@@ -29,12 +29,15 @@ export class QueryString {
       let statePaths = getObjectPaths(options.initialState);
       for (let pathKey of statePaths) {
         let curValue = get(objToStringify, pathKey, undefined);
-        if (typeof curValue === 'undefined' || curValue === null)
+        if (typeof curValue === 'undefined')
           continue;
         
         let initValue = get(options.initialState, pathKey);
         if (isEqual(curValue, initValue))
           unset(objToStringify, pathKey);
+        else if (curValue === null && initValue !== null && typeof initValue !== 'undefined') {
+          set(objToStringify as any, pathKey, '');
+        }
       }
     }
     objToStringify = cleanDeep(objToStringify, { emptyStrings: false });
@@ -113,6 +116,12 @@ export class QueryString {
     if (!qs || qs === '?') return options.initialState ?? {};
     if (qs[0] === '?') qs = qs.substr(1);
 
+    // build types (if we can)
+    let typeDefs = options.types;
+    if (!typeDefs && !!options.initialState) {
+      typeDefs = buildTypeDefs(options.initialState);
+    }
+
     let result: Record<string, unknown> = {};
     
     function parseValue(value: string): any {
@@ -161,12 +170,6 @@ export class QueryString {
         continue;
       }
       result[decode(key)] = parseValue(value);
-    }
-
-    // build types (if we can)
-    let typeDefs = options.types;
-    if (!typeDefs && !!options.initialState) {
-      typeDefs = buildTypeDefs(options.initialState);
     }
 
     if (typeof typeDefs !== 'undefined') {

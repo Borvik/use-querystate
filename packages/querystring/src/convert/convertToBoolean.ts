@@ -1,7 +1,9 @@
-export function convertToBoolean(value: unknown): boolean | undefined {
+export function convertToBoolean(value: unknown): boolean | undefined | null {
   if (!value || value === null) return undefined;
   if (typeof value !== 'string')
     throw new Error(`Unable to convert value to boolean`);
+
+  if (value === '') return null;
 
   if (['1', 'true', 't'].includes(value.toLocaleLowerCase()))
     return true;

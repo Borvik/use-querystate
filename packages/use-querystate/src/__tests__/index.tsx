@@ -100,7 +100,7 @@ describe('Parsing Tests', () => {
     expect(qs).toStrictEqual({ page: 2, pageSize: 10 });
 
     await act(async () => {
-      setQsOrig(pg => ({ page: pg.page + 1 }));
+      setQsOrig(pg => ({ page: pg.page! + 1 }));
     });
 
     let [qs1, setQs1] = result.current;
@@ -109,7 +109,7 @@ describe('Parsing Tests', () => {
     expect(setQs1).toStrictEqual(setQsOrig);
 
     await act(async () => {
-      setQs1(pg => ({ page: pg.page + 1 }));
+      setQs1(pg => ({ page: pg.page! + 1 }));
     });
 
     let [qs2, setQs2] = result.current;
@@ -129,6 +129,46 @@ describe('Parsing Tests', () => {
 
     let [qs] = result.current;
     expect(qs).toStrictEqual({ filter: { amount: '13', op: 'lt' } });
+  });
+
+  test('Removing Defaults', async () => {
+    const result = getHook({ page: 1, pageSize: 10 })
+
+    let [qs, setQs] = result.current;
+    expect(qs).toStrictEqual({ page: 2, pageSize: 10 });
+
+    await act(async () => {
+      setQs({ page: null });
+    });
+
+    [qs, setQs] = result.current;
+    expect(qs).toStrictEqual({ page: null, pageSize: 10 });
+    expect(history.location.search).toBe('?page=');
+  });
+
+  test('Removing defaults part 2', async () => {
+    history.push('/');
+    const result = getHook({
+      filter: {
+        num: "002"
+      }
+    }, {
+      types: {
+        filter: 'any'
+      },
+      filterToTypeDef: true,
+    });
+
+    let [qs, setQs] = result.current;
+    expect(qs).toStrictEqual({ filter: { num: "002" } });
+
+    await act(async () => {
+      setQs({ filter: null });
+    });
+
+    [qs, setQs] = result.current;
+    expect(history.location.search).toBe('?filter=');
+    expect(qs).toStrictEqual({ filter: null });
   });
 
   test('Multi-Hook', async () => {

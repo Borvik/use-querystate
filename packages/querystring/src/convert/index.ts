@@ -23,6 +23,9 @@ export function convert(qsObj: Record<string, unknown>, definedTuples: boolean, 
         if (typeof newValue !== 'undefined')
           set(convertedObj, propPath, newValue);
       }
+      else if (value === null) {
+        set(convertedObj, propPath, '');
+      }
     }
   }
   return convertedObj;

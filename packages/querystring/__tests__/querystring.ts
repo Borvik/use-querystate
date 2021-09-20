@@ -138,6 +138,15 @@ describe('Parsing Tests', () => {
       filterToTypeDef: true,
     })).toEqual({ filter: { amount: '13', op: 'lt' }})
   });
+
+  test('Unset a default: ?page=', () => {
+    expect(QueryString.parse('?page=&pageSize=10', {
+      initialState: {
+        page: 2,
+        pageSize: 25,
+      }
+    })).toEqual({ page: null, pageSize: 10 });
+  });
 });
 
 describe('Stringify Tests', () => {
@@ -168,7 +177,13 @@ describe('Stringify Tests', () => {
     expect(QueryString.stringify({page: 1, pageSize: 10}, { initialState: { page: 1, pageSize: 10 }})).toBe('');
   });
 
-  
+  test('Unsetting a default', () => {
+    expect(QueryString.stringify({
+      page: null,
+    }, {
+      initialState: { page: 2 }
+    })).toBe('page=');
+  });
 });
 
 describe('Merge Tests', () => {
@@ -206,5 +221,13 @@ describe('Merge Tests', () => {
       { page: 1 },
       { initialState: { page: 1, pageSize: 25 }}
     )).toBe('pageSize=10');
+  });
+
+  test('Merge unset a default', () => {
+    expect(QueryString.merge(
+      '?page=5&pageSize=10',
+      { page: null },
+      { initialState: { page: 2, pageSize: 25 } }
+    )).toBe('page=&pageSize=10');
   });
 });
