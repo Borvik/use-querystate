@@ -139,13 +139,26 @@ describe('Parsing Tests', () => {
     })).toEqual({ filter: { amount: '13', op: 'lt' }})
   });
 
-  test('Unset a default: ?page=', () => {
+  test('Unset a default: ?page=&pageSize=10', () => {
     expect(QueryString.parse('?page=&pageSize=10', {
       initialState: {
         page: 2,
         pageSize: 25,
       }
     })).toEqual({ page: null, pageSize: 10 });
+  });
+
+  test('Unset a default 2: ?filter=', () => {
+    expect(QueryString.parse('?filter=', {
+      initialState: {
+        filter: {
+          num: "002"
+        }
+      },
+      types: {
+        filter: 'object'
+      }
+    })).toEqual({ filter: null });
   });
 });
 
@@ -181,6 +194,25 @@ describe('Stringify Tests', () => {
     expect(QueryString.stringify({
       page: null,
     }, {
+      initialState: { page: 2 }
+    })).toBe('page=');
+  });
+
+  test('Unsetting a default 2: ?filter=', () => {
+    expect(QueryString.stringify({
+      filter: null,
+    }, {
+      initialState: {
+        filter: {
+          num: "002"
+        }
+      }
+    })).toBe('filter=');
+  });
+
+  test('Unsetting a default - part 3', () => {
+    // this is different from the merge of empty set in that, this isn't a merge - its setting in full
+    expect(QueryString.stringify({}, {
       initialState: { page: 2 }
     })).toBe('page=');
   });
@@ -229,5 +261,25 @@ describe('Merge Tests', () => {
       { page: null },
       { initialState: { page: 2, pageSize: 25 } }
     )).toBe('page=&pageSize=10');
+  });
+
+  test('Merge unset a default 2', () => {
+    expect(QueryString.merge(
+      '?filter=(num:003)',
+      { filter: null }, {
+      initialState: {
+        filter: {
+          num: "002"
+        }
+      }
+    })).toBe('filter=');
+  });
+
+  test('Merge unset a default (wrong)', () => {
+    expect(QueryString.merge(
+      '?page=5&pageSize=10',
+      { }, // empty set of new data - no change
+      { initialState: { page: 2, pageSize: 25 } }
+    )).toBe('page=5&pageSize=10');
   });
 });

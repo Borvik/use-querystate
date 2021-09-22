@@ -27,15 +27,21 @@ export class QueryString {
     let objToStringify: unknown = cloneDeep(obj);
     if (!!options.initialState) {
       let statePaths = getObjectPaths(options.initialState);
+      // console.log({statePaths})
       for (let pathKey of statePaths) {
         let curValue = get(objToStringify, pathKey, undefined);
-        if (typeof curValue === 'undefined')
-          continue;
-        
         let initValue = get(options.initialState, pathKey);
+
         if (isEqual(curValue, initValue))
           unset(objToStringify, pathKey);
-        else if (curValue === null && initValue !== null && typeof initValue !== 'undefined') {
+        else if (
+          initValue !== null && typeof initValue !== 'undefined' &&
+          (
+            typeof curValue === 'undefined' ||
+            curValue === null
+          )
+        ) {
+          // need to check any path up to this path to see if it is set
           set(objToStringify as any, pathKey, '');
         }
       }
