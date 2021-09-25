@@ -4,6 +4,7 @@ import { isset, isStringable } from "./isset";
 import cleanDeep from 'clean-deep';
 import set from 'lodash/set';
 import get from 'lodash/get';
+import has from 'lodash/has';
 import unset from 'lodash/unset';
 import defaultsDeep from 'lodash/defaultsDeep';
 import cloneDeep from 'lodash/cloneDeep';
@@ -27,7 +28,6 @@ export class QueryString {
     let objToStringify: unknown = cloneDeep(obj);
     if (!!options.initialState) {
       let statePaths = getObjectPaths(options.initialState);
-      // console.log({statePaths})
       for (let pathKey of statePaths) {
         let curValue = get(objToStringify, pathKey, undefined);
         let initValue = get(options.initialState, pathKey);
@@ -42,7 +42,18 @@ export class QueryString {
           )
         ) {
           // need to check any path up to this path to see if it is set
-          set(objToStringify as any, pathKey, '');
+          let curPath: string[] = [], currIdx: number = 0;
+          do {
+            curPath = pathKey.slice(0, pathKey.length - (currIdx++));
+            if (curPath.length && has(objToStringify, curPath)) {
+              break;
+            }
+          } while(curPath.length > 1);
+          
+          // if a key existed, curPath will still be set, and we blank _that_ key
+          if (curPath.length) {
+            set(objToStringify as any, curPath, '');
+          }
         }
       }
     }

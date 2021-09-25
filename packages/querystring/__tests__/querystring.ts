@@ -157,7 +157,8 @@ describe('Parsing Tests', () => {
       },
       types: {
         filter: 'object'
-      }
+      },
+      log: true,
     })).toEqual({ filter: null });
   });
 });

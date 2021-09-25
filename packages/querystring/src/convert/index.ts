@@ -5,6 +5,7 @@ import get from 'lodash/get';
 import set from 'lodash/set';
 import cloneDeep from 'lodash/cloneDeep';
 
+// TODO: This need to account for potentially "unset" parent elements
 export function convert(qsObj: Record<string, unknown>, definedTuples: boolean, typeDef: PathTypes, typeDefsFromInitial: boolean, filterToTypeDef: boolean): Record<string, unknown> {
   let dataTypes = getPathTypes(typeDef, definedTuples);
   let paths = getObjectPaths(qsObj, definedTuples);
