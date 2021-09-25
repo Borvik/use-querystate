@@ -158,7 +158,51 @@ describe('Parsing Tests', () => {
       types: {
         filter: 'object'
       },
-      log: true,
+    })).toEqual({ filter: null });
+  });
+
+  test('Unset a default 3: ?filter=', () => {
+    expect(QueryString.parse('?filter=', {
+      initialState: {
+        filter: {
+          num: "002"
+        }
+      },
+      types: {
+        filter: {
+          num: 'string'
+        }
+      },
+    })).toEqual({ filter: null });
+  });
+
+  test('Unset a default 4: ?filter=', () => {
+    expect(QueryString.parse('?filter=', {
+      initialState: {
+        filter: {
+          num: "002"
+        }
+      },
+      types: {
+        filter: 'object'
+      },
+      filterToTypeDef: true,
+    })).toEqual({ filter: null });
+  });
+
+  test('Unset a default 5: ?filter=', () => {
+    expect(QueryString.parse('?filter=', {
+      initialState: {
+        filter: {
+          num: "002"
+        }
+      },
+      types: {
+        filter: {
+          num: 'string'
+        }
+      },
+      filterToTypeDef: true,
     })).toEqual({ filter: null });
   });
 });

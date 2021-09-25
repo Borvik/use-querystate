@@ -20,7 +20,6 @@ export interface ParseOptions<T extends object> {
   initialState?: T
   lockTypesToInitialState?: boolean
   filterToTypeDef?: boolean
-  log?: boolean
 }
 
 export interface MergeOptions<T extends object> {

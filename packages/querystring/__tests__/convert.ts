@@ -12,17 +12,21 @@ describe('Conversion tests', () => {
       l: ['1', '2'],
       m: ['1', '2'],
       o: ['1', '0'],
-    }, false, {
-      a: 'any',
-      d: 'string',
-      f: 'number',
-      g: 'bigint',
-      h: 'boolean',
-      i: 'string[]',
-      l: 'number[]',
-      m: 'bigint[]',
-      o: 'boolean[]',
-    }, true, false))
+    }, 
+    {
+      typeDef: {
+        a: 'any',
+        d: 'string',
+        f: 'number',
+        g: 'bigint',
+        h: 'boolean',
+        i: 'string[]',
+        l: 'number[]',
+        m: 'bigint[]',
+        o: 'boolean[]',
+      },
+      typeDefsFromInitial: true,
+    }))
     .toMatchObject({
       a: {b:'c'},
       d: 'e',
@@ -37,34 +41,48 @@ describe('Conversion tests', () => {
   });
 
   test('Tuple Conversion', () => {
-    expect(convert({a: {b: ['1', 'c', '1']}}, true, {
-      a: {
-        b: ['number', 'string', 'boolean']
-      }
-    }, true, false)).toEqual({a: {b: [1, 'c', true]}});
+    expect(convert({a: {b: ['1', 'c', '1']}}, {
+      definedTuples: true,
+      typeDef: {
+        a: {
+          b: ['number', 'string', 'boolean']
+        }
+      },
+      typeDefsFromInitial: true,
+    })).toEqual({a: {b: [1, 'c', true]}});
   });
 
   test('Filtered by typeDef from initial', () => {
-    expect(convert({pageSize: '50'}, false, {
-      page: 'number'
-    }, false, false)).toEqual({});
+    expect(convert({pageSize: '50'}, {
+      typeDef: {
+        page: 'number'
+      }
+    })).toEqual({});
   });
 
   test('Filtered by typeDef 2 from initial', () => {
-    expect(convert({page: '1', pageSize: '50'}, false, {
-      page: 'number'
-    }, false, false)).toEqual({page: 1});
+    expect(convert({page: '1', pageSize: '50'}, {
+      typeDef: {
+        page: 'number'
+      }
+    })).toEqual({page: 1});
   });
 
   test('Unfiltered by initial typeDef', () => {
-    expect(convert({pageSize: '50'}, false, {
-      page: 'number'
-    }, true, false)).toEqual({pageSize: '50'});
+    expect(convert({pageSize: '50'}, {
+      typeDef: {
+        page: 'number'
+      },
+      typeDefsFromInitial: true,
+    })).toEqual({pageSize: '50'});
   });
 
   test('Unfiltered by initial typeDef 2', () => {
-    expect(convert({page: '1', pageSize: '50'}, false, {
-      page: 'number'
-    }, true, false)).toEqual({page: 1, pageSize: '50'});
+    expect(convert({page: '1', pageSize: '50'}, {
+      typeDef: {
+        page: 'number'
+      },
+      typeDefsFromInitial: true,
+    })).toEqual({page: 1, pageSize: '50'});
   });
 });

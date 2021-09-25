@@ -192,12 +192,16 @@ export class QueryString {
     if (typeof typeDefs !== 'undefined') {
       result = convert(
         result,
-        options.definedTuples ?? false,
-        typeDefs,
-        (!!typeDefs && !options.types && !options.lockTypesToInitialState),
-        options.filterToTypeDef ?? false
+        {
+          definedTuples: options.definedTuples ?? false,
+          typeDef: typeDefs,
+          typeDefsFromInitial: (!!typeDefs && !options.types && !options.lockTypesToInitialState),
+          filterToTypeDef: options.filterToTypeDef ?? false,
+        }
       );
     }
+
+    // if (options.log) console.log({result, initial: options.initialState});
 
     if (options.initialState)
       result = defaultsDeep(result, options.initialState);

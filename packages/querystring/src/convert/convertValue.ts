@@ -13,7 +13,7 @@ export function convertValue(value: unknown, toType: typeofWithArrays) {
 
   if (toType === 'object') {
     // special handling for objects (NOT ARRAYS)
-    if (value === '') return undefined;
+    if (value === '') return null;
     if (typeof value !== 'object')
       throw new Error(`Unable to convert ${typeof value} to an 'object'`);
     if (Array.isArray(value))
