@@ -13,6 +13,7 @@ import { getObjectPaths } from "./pathTree";
 import { convert } from "./convert";
 import { buildTypeDefs } from "./buildTypeDefs";
 import { isEqual } from "./isEqual";
+import defaults from 'lodash/defaults';
 
 export type { PathTypes } from './types';
 
@@ -26,38 +27,39 @@ export class QueryString {
    */
   static stringify<T extends object, S extends object>(obj: T, options: StringifyOptions<S> = {}): string {
     let objToStringify: unknown = cloneDeep(obj);
+    let topKeysToKeep: Set<string> = new Set();
     if (!!options.initialState) {
       let statePaths = getObjectPaths(options.initialState);
       for (let pathKey of statePaths) {
         let curValue = get(objToStringify, pathKey, undefined);
         let initValue = get(options.initialState, pathKey);
 
-        if (isEqual(curValue, initValue))
-          unset(objToStringify, pathKey);
-        else if (
-          initValue !== null && typeof initValue !== 'undefined' &&
-          (
-            typeof curValue === 'undefined' ||
-            curValue === null
-          )
-        ) {
-          // need to check any path up to this path to see if it is set
-          let curPath: string[] = [], currIdx: number = 0;
-          do {
-            curPath = pathKey.slice(0, pathKey.length - (currIdx++));
-            if (curPath.length && has(objToStringify, curPath)) {
-              break;
-            }
-          } while(curPath.length > 1);
-          
-          // if a key existed, curPath will still be set, and we blank _that_ key
-          if (curPath.length) {
-            set(objToStringify as any, curPath, '');
+        let hasInitialValue = (initValue !== null && typeof initValue !== 'undefined');
+        let hasCurValue = (curValue !== null && typeof curValue !== 'undefined');
+
+        if (pathKey.length === 1) {
+          if (isEqual(curValue, initValue)) {
+            unset(objToStringify, pathKey);
           }
+          else if (hasInitialValue && !hasCurValue) {
+            set(objToStringify as any, pathKey, '');
+          }
+        }
+        else if (hasInitialValue && !hasCurValue) {
+          set(objToStringify as any, pathKey, null);
+          topKeysToKeep.add(pathKey[0]);
         }
       }
     }
     objToStringify = cleanDeep(objToStringify, { emptyStrings: false });
+
+    if (topKeysToKeep.size) {
+      for (let key of topKeysToKeep) {
+        if (!has(objToStringify, key)) {
+          set(objToStringify as any, key, '');
+        }
+      }
+    }
 
     let seenObjects: any[] = [];
 
@@ -201,10 +203,8 @@ export class QueryString {
       );
     }
 
-    // if (options.log) console.log({result, initial: options.initialState});
-
     if (options.initialState)
-      result = defaultsDeep(result, options.initialState);
+      result = defaults(result, options.initialState);
     return result;
   }
 
