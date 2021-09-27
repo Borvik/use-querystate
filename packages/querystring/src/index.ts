@@ -227,7 +227,7 @@ export class QueryString {
     } else {
       let newKeys = Object.keys(newValues) as (keyof T)[];
       for (let key of newKeys) {
-        set(qsObject, key, newValues[key]);
+        qsObject[key as string] = newValues[key];
       }
     }
 

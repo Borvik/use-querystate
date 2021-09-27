@@ -310,6 +310,17 @@ describe('Merge Tests', () => {
     )).toBe('a=(b:1;d:e,f;j:(k:l);m:o)&g=h')
   });
 
+  test('Deep Merge 2', () => {
+    expect(QueryString.merge(
+      '?a=(b:(c:d))',
+      {
+        a: { b: { e: 'f' }},
+        'a.b.g': 'h',
+      },
+      { deepMerge: true }
+    )).toBe('a=(b:(c:d;e:f))&a.b.g=h');
+  });
+
   test('Deep Unset', () => {
     expect(QueryString.merge(
       '?a=(b:c;d:e,f;j:(k:l))',

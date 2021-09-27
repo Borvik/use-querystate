@@ -7,10 +7,29 @@ export interface QueryStateOptions {
   filterToTypeDef?: boolean;
 }
 
-export type DeepNullable<T> = {
-  [P in keyof T]: T[P] extends (infer U)[]
-    ? DeepNullable<U>[]
-    : T[P] extends Readonly<infer U>[]
-      ? Readonly<DeepNullable<U> | null>[]
-      : DeepNullable<T[P]> | null
-};
+// export type Deep_Nullable<T> = {
+//   [P in keyof T]: T[P] extends (infer U)[]
+//     ? Deep_Nullable<U>[]
+//     : T[P] extends Readonly<infer U>[]
+//       ? Readonly<Deep_Nullable<U> | null>[]
+//       : Deep_Nullable<T[P]> | null
+// };
+
+export type DeepPartial<T> =
+  T extends string | number | bigint | boolean | null | undefined | symbol | Date
+    ? T | undefined | null
+    : T extends Array<infer ArrayType>
+      ? Array<DeepPartial<ArrayType>>
+      : T extends ReadonlyArray<infer ArrayType>
+        ? ReadonlyArray<DeepPartial<ArrayType>>
+        : T extends Set<infer SetType>
+          ? Set<DeepPartial<SetType>>
+          : T extends ReadonlySet<infer SetType>
+            ? ReadonlySet<DeepPartial<SetType>>
+            : T extends Map<infer KeyType, infer ValueType>
+              ? Map<DeepPartial<KeyType>, DeepPartial<ValueType>>
+              : T extends ReadonlyMap<infer KeyType, infer ValueType>
+                ? ReadonlyMap<DeepPartial<KeyType>, DeepPartial<ValueType>>
+                : {
+                  [K in keyof T]?: DeepPartial<T[K]> | null
+                }

@@ -59,8 +59,8 @@ describe('Parsing Tests', () => {
   });
 
   test('Prefix', async () => {
-    history.push('/?d=(page:2)');
-    const result = getHook({ page: 1, pageSize: 10 }, { prefix: 'd' });
+    history.push('/?d.page=2');
+    const result = getHook({ page: 1, pageSize: 10 }, { prefix: 'd.' });
 
     let [qs, setQs] = result.current;
     expect(qs).toStrictEqual({ page: 2, pageSize: 10 });
@@ -71,7 +71,7 @@ describe('Parsing Tests', () => {
 
     [qs, setQs] = result.current;
     expect(qs).toStrictEqual({ page: 3, pageSize: 10 });
-    expect(history.location.search).toBe('?d=(page:3)');
+    expect(history.location.search).toBe('?d.page=3');
   });
 
   test('Batch Updates', async () => {
@@ -154,7 +154,7 @@ describe('Parsing Tests', () => {
       }
     }, {
       types: {
-        filter: 'any'
+        filter: 'object'
       },
       filterToTypeDef: true,
     });
@@ -169,6 +169,35 @@ describe('Parsing Tests', () => {
     [qs, setQs] = result.current;
     expect(history.location.search).toBe('?filter=');
     expect(qs).toStrictEqual({ filter: null });
+  });
+
+  test('Removing defaults part 3', async () => {
+    const result = getHook({
+      filter: {
+        num: "002",
+        b: 3,
+      }
+    }, {
+      types: {
+        filter: {
+          num: 'string',
+          b: 'number'
+        }
+      },
+      filterToTypeDef: true,
+    });
+
+    console.log('History:', history.location.search);
+    let [qs, setQs] = result.current;
+    expect(qs).toStrictEqual({ filter: { num: "002", b: 3 } });
+
+    await act(async () => {
+      setQs({ filter: { b: 3 } });
+    });
+
+    [qs, setQs] = result.current;
+    expect(history.location.search).toBe('?page=2&filter=(b:3)');
+    expect(qs).toStrictEqual({ filter: { b: 3} });
   });
 
   test('Multi-Hook', async () => {
