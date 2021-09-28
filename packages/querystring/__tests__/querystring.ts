@@ -139,6 +139,25 @@ describe('Parsing Tests', () => {
     })).toEqual({ filter: { amount: '13', op: 'lt' }})
   });
 
+  test('Type Lock w/ Filter: ?page=2', () => {
+    expect(QueryString.parse('?page=2', {
+      initialState: {
+        filter: {
+          num: '002',
+          b: 3
+        }
+      },
+      types: {
+        filter: {
+          num: 'string',
+          b: 'number'
+        }
+      },
+      lockTypesToInitialState: true,
+      filterToTypeDef: true,
+    })).toEqual({ filter: { num: '002', b: 3 }});
+  });
+
   test('Unset a default: ?page=&pageSize=10', () => {
     expect(QueryString.parse('?page=&pageSize=10', {
       initialState: {
