@@ -139,7 +139,7 @@ describe('Parsing Tests', () => {
     })).toEqual({ filter: { amount: '13', op: 'lt' }})
   });
 
-  test('Type Lock w/ Filter: ?page=2', () => {
+  test('Filter to types with existing: ?page=2', () => {
     expect(QueryString.parse('?page=2', {
       initialState: {
         filter: {
@@ -153,7 +153,6 @@ describe('Parsing Tests', () => {
           b: 'number'
         }
       },
-      lockTypesToInitialState: true,
       filterToTypeDef: true,
     })).toEqual({ filter: { num: '002', b: 3 }});
   });

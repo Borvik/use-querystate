@@ -188,7 +188,6 @@ describe('Parsing Tests', () => {
     });
 
     let [qs, setQs] = result.current;
-    console.log('History:', history.location.search, qs);
     expect(qs).toStrictEqual({ filter: { num: "002", b: 3 } });
 
     await act(async () => {

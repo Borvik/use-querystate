@@ -25,11 +25,11 @@ export function convert(qsObj: Record<string, unknown>, { definedTuples = false,
     let joinedPath = propPath.join('.');
     let value = get(qsObj, propPath, undefined);
 
-    if (typeof value === 'undefined') {
-      // TODO: is it really undefined?
+    if (typeof value === 'undefined' && !(qsObj as object).hasOwnProperty(propPath[0])) {
+      continue;
     }
 
-    if (value === '') {
+    if (value === '' || typeof value === 'undefined') {
       let keyToSearch = joinedPath + '.';
       let found = false;
       for (const key of dataTypes.keys()) {
@@ -45,7 +45,7 @@ export function convert(qsObj: Record<string, unknown>, { definedTuples = false,
       }
     }
 
-    if (value === '' && filterToTypeDef) {
+    if ((value === '' || typeof value === 'undefined') && filterToTypeDef) {
       // check the path parts if anything is set
       let curPath: string[] = [], curIdx: number = 0;
       do {
