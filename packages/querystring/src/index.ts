@@ -28,9 +28,12 @@ export class QueryString {
   static stringify<T extends object, S extends object>(obj: T, options: StringifyOptions<S> = {}): string {
     let objToStringify: unknown = cloneDeep(obj);
     let topKeysToKeep: Set<string> = new Set();
+    let topKeysToSkip: Set<string> = new Set();
     if (!!options.initialState) {
       let statePaths = getObjectPaths(options.initialState);
       for (let pathKey of statePaths) {
+        if (pathKey.length < 1) continue;
+        if (topKeysToSkip.has(pathKey[0])) continue;
         let curValue = get(objToStringify, pathKey, undefined);
         let initValue = get(options.initialState, pathKey);
 
@@ -43,6 +46,15 @@ export class QueryString {
           }
           else if (hasInitialValue && !hasCurValue) {
             set(objToStringify as any, pathKey, '');
+          }
+        }
+        else if (hasInitialValue && hasCurValue) {
+          let topCurValue = get(objToStringify, pathKey[0], undefined);
+          let topInitValue = get(options.initialState, pathKey[0]);
+
+          if (isEqual(topCurValue, topInitValue)) {
+            unset(objToStringify, pathKey[0]);
+            topKeysToSkip.add(pathKey[0]);
           }
         }
         else if (hasInitialValue && !hasCurValue) {

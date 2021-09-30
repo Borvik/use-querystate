@@ -291,7 +291,7 @@ describe('Stringify Tests', () => {
     })).toBe('page=');
   });
 
-  test('Unsetting a default 4: ?filter=', () => {
+  test('Unsetting a default 4', () => {
     expect(QueryString.stringify({
       filter: {
         b: 3
@@ -305,6 +305,22 @@ describe('Stringify Tests', () => {
       },
     })).toBe('filter=(b:3)');
   });
+
+  test('Re-setting a default', () => {
+    expect(QueryString.stringify({
+      filter: {
+        num: "002",
+        b: 3,
+      },
+    }, {
+      initialState: {
+        filter: {
+          num: "002",
+          b: 3,
+        }
+      },
+    })).toBe('');
+  })
 });
 
 describe('Merge Tests', () => {
