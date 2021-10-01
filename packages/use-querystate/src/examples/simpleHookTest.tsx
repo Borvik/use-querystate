@@ -16,25 +16,11 @@ export const SimpleHookTest: React.FC = () => {
 
 const SimpleHookUsage: React.FC = () => {
   const renderCount = useRenderCount();
-  /// const [pages, setPages] = useQueryState({page: 1}, { prefix: 'd.'});
-  const [filter, setFilter] = useQueryState({
-    filter: {
-      num: "002",
-    }
-  }, {
-    types: {
-      filter: {
-        num: 'string',
-      }
-    },
-    filterToTypeDef: true,
-  })
+  const [pages, setPages] = useQueryState({page: 1});
 
   return <>
-    {/* <button onClick={() => setPages(prev => prev.page === 1 ? { page : 2} : { page : 1})}>Set Page</button> */}
-    <button onClick={() => setFilter(prev => prev.filter?.num ? { filter: null } : { filter: { num: "002" } })}>Set Page</button>
+    <button onClick={() => setPages(prev => prev.page === 1 ? { page : 2} : { page : 1})}>Set Page</button>
     <pre>Rendered: {renderCount}</pre>
-    {/* <pre>{JSON.stringify(pages, null, 2)}</pre> */}
-    <pre>{JSON.stringify(filter, null, 2)}</pre>
+    <pre>{JSON.stringify(pages, null, 2)}</pre>
   </>
 }
