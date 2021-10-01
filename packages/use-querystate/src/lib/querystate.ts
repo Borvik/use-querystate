@@ -1,7 +1,7 @@
 import { useCallback, useDebugValue, useRef, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { getQueryState } from './getQueryState';
-import { QueryStateOptions } from "./types";
+import { DeepPartial, QueryStateOptions } from "./types";
 import { isEqual } from '@borvik/querystring/dist/isEqual';
 import { useDeepDerivedState } from './useDeepDerivedState';
 import { BATCHING_UPDATES, performBatchedUpdate } from './batchUpdates';
@@ -10,20 +10,20 @@ import { getQueryString } from './getQueryString';
 type LocalState<State> = {init: false} | {init: true, publicState: State, search: string};
 type NewState<State> = (Partial<State> | ((state: State) => Partial<State>));
 
-export function useQueryState<State extends object>(initialState: State, options?: QueryStateOptions): [State, (newState: Partial<State> | ((state: State) => Partial<State>)) => void] {
+export function useQueryState<State extends object>(initialState: State, options?: QueryStateOptions): [DeepPartial<State>, (newState: DeepPartial<State> | ((state: DeepPartial<State>) => DeepPartial<State>)) => void] {
   const [,setRerender] = useState(1);
-  const localRef = useRef<LocalState<State>>({init: false});
+  const localRef = useRef<LocalState<DeepPartial<State>>>({init: false});
   const location = useLocation();
   const history = useHistory();
 
-  let currPublicState: State;
+  let currPublicState: DeepPartial<State>;
   if (!localRef.current.init || (!options?.internalState && location.search !== localRef.current.search)) {
     let potentialPublicState = options?.internalState
       ? initialState
       : getQueryState(location.search, initialState, options);
 
     if (!localRef.current.init || !isEqual(localRef.current.publicState, potentialPublicState)) {
-      currPublicState = potentialPublicState;
+      currPublicState = potentialPublicState as DeepPartial<State>;
     } else {
       currPublicState = localRef.current.publicState;
     }
@@ -41,7 +41,7 @@ export function useQueryState<State extends object>(initialState: State, options
   let [derivedInitialState] = useDeepDerivedState(() => { return initialState; }, [initialState]);
 
   const { internalState: useInternalState, prefix } = options ?? {};
-  const publicSetState = useCallback((newState: NewState<State>) => {
+  const publicSetState = useCallback((newState: NewState<DeepPartial<State>>) => {
     if (!localRef.current.init) throw new Error('Set Query State called before it was initialized');
 
     /**

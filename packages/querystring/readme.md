@@ -83,7 +83,7 @@ var qs = {
 
 // ?a=b,c
 qs = {
-  "a", ["b", "c"]
+  "a": ["b", "c"]
 }
 
 // ?a=(b:c;d:e),(f:g;h:i,j)
@@ -164,7 +164,7 @@ Returns an object containing the values parsed from the query string, or if ther
 
 #### Definition of `types`
 
-A type definition may be any of `any`, `string`, `number`, `bigint`, `boolean`, `string[]`, `number[]`, `bigint[]`, or `boolean[]`.
+A type definition may be any of `any`, `object`, `string`, `number`, `bigint`, `boolean`, `string[]`, `number[]`, `bigint[]`, or `boolean[]`.
 
 The type definition object should mirror that of the expected input. When using this conversion feature it locks the query string to the expected definition. Missing key/values are fine, but _extra_ key/values are discarded silently. Useful if you only want _part_ of the query string.
 
@@ -239,6 +239,25 @@ let decoded = QueryString.parse('?a=b&c=5&e=1', {
 });
 // decoded = {a: 'b', c: 5, e: true}
 // note - values of initialState aren't important, but types are
+
+let decoded = QueryString.parse('?filter=', {
+  initialState: {
+    filter: {
+      num: '002',
+    }
+  }
+});
+// decoded = { filter: null }
+
+let decoded = QueryString.parse('?filter=(num:002)', {
+  initialState: {
+    filter: {
+      num: '002',
+      b: 3
+    }
+  }
+});
+// decoded = { filter: { num: '002' } }
 ```
 
 ## `merge`
@@ -283,6 +302,19 @@ let merged = QueryString.merge('?page=5&pageSize=10', { page: 1 }, {
   initialState: { page: 1, pageSize: 25 }
 });
 // merged = "pageSize=10"
+
+let merged = QueryString.merge('?page=2&filter=(num:002)', {
+  filter: null
+}, {
+  initialState: {
+    page: 1,
+    filter: {
+      num: '002',
+      b: 3,
+    }
+  }
+});
+// merged = "page=2&filter=null
 ```
 
 > NOTE: In the `deepMerge` example path `a.j.k` is set to `null`, which leaves `j` an empty object so it too is removed.

@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@borvik/querystring",
+      "comment": "Clear/override initial values - changes how defaults are applied and allows more nulls to return to replace initial values",
+      "type": "major"
+    }
+  ],
+  "packageName": "@borvik/querystring",
+  "email": "ckolkman@treorisoft.com"
+}

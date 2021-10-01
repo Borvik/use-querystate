@@ -29,6 +29,26 @@ describe('Parsing Tests', () => {
     });
   });
 
+  test('     ?a=b', () => {
+    expect(QueryString.parse('   ?a=b')).toEqual({
+      a: 'b'
+    });
+  });
+
+  test('  ?   a   =  b   &   c  =  d  ', () => {
+    expect(QueryString.parse('  ?   a   =  b   &   c  =  d  ')).toEqual({
+      '   a   ': '  b   ',
+      '   c  ': '  d  ',
+    });
+  });
+
+  test('   a   =  b   &   c  =  d  ', () => {
+    expect(QueryString.parse('   a   =  b   &   c  =  d  ')).toEqual({
+      '   a   ': '  b   ',
+      '   c  ': '  d  ',
+    });
+  });
+
   test('a=b&c=d', () => {
     expect(QueryString.parse('a=b&c=d')).toEqual({
       a: 'b',
@@ -138,6 +158,102 @@ describe('Parsing Tests', () => {
       filterToTypeDef: true,
     })).toEqual({ filter: { amount: '13', op: 'lt' }})
   });
+
+  test('Filter to types with existing: ?page=2', () => {
+    expect(QueryString.parse('?page=2', {
+      initialState: {
+        filter: {
+          num: '002',
+          b: 3
+        }
+      },
+      types: {
+        filter: {
+          num: 'string',
+          b: 'number'
+        }
+      },
+      filterToTypeDef: true,
+    })).toEqual({ filter: { num: '002', b: 3 }});
+  });
+
+  test('Unset a default: ?page=&pageSize=10', () => {
+    expect(QueryString.parse('?page=&pageSize=10', {
+      initialState: {
+        page: 2,
+        pageSize: 25,
+      }
+    })).toEqual({ page: null, pageSize: 10 });
+  });
+
+  test('Unset a default 2: ?filter=', () => {
+    expect(QueryString.parse('?filter=', {
+      initialState: {
+        filter: {
+          num: "002"
+        }
+      },
+      types: {
+        filter: 'object'
+      },
+    })).toEqual({ filter: null });
+  });
+
+  test('Unset a default 3: ?filter=', () => {
+    expect(QueryString.parse('?filter=', {
+      initialState: {
+        filter: {
+          num: "002"
+        }
+      },
+      types: {
+        filter: {
+          num: 'string'
+        }
+      },
+    })).toEqual({ filter: null });
+  });
+
+  test('Unset a default 4: ?filter=', () => {
+    expect(QueryString.parse('?filter=', {
+      initialState: {
+        filter: {
+          num: "002"
+        }
+      },
+      types: {
+        filter: 'object'
+      },
+      filterToTypeDef: true,
+    })).toEqual({ filter: null });
+  });
+
+  test('Unset a default 5: ?filter=', () => {
+    expect(QueryString.parse('?filter=', {
+      initialState: {
+        filter: {
+          num: "002"
+        }
+      },
+      types: {
+        filter: {
+          num: 'string'
+        }
+      },
+      filterToTypeDef: true,
+    })).toEqual({ filter: null });
+  });
+
+  test('Unset a default 6: ?filter=', () => {
+    expect(QueryString.parse('?filter=(b:3)', {
+      initialState: {
+        filter: {
+          num: "002",
+          b: 3,
+        }
+      },
+    })).toEqual({ filter: { b: 3 } });
+  });
 });
 
 describe('Stringify Tests', () => {
@@ -168,7 +284,63 @@ describe('Stringify Tests', () => {
     expect(QueryString.stringify({page: 1, pageSize: 10}, { initialState: { page: 1, pageSize: 10 }})).toBe('');
   });
 
-  
+  test('Unsetting a default', () => {
+    expect(QueryString.stringify({
+      page: null,
+    }, {
+      initialState: { page: 2 }
+    })).toBe('page=');
+  });
+
+  test('Unsetting a default 2: ?filter=', () => {
+    expect(QueryString.stringify({
+      filter: null,
+    }, {
+      initialState: {
+        filter: {
+          num: "002"
+        }
+      }
+    })).toBe('filter=');
+  });
+
+  test('Unsetting a default - part 3', () => {
+    // this is different from the merge of empty set in that, this isn't a merge - its setting in full
+    expect(QueryString.stringify({}, {
+      initialState: { page: 2 }
+    })).toBe('page=');
+  });
+
+  test('Unsetting a default 4', () => {
+    expect(QueryString.stringify({
+      filter: {
+        b: 3
+      },
+    }, {
+      initialState: {
+        filter: {
+          num: "002",
+          b: 3,
+        }
+      },
+    })).toBe('filter=(b:3)');
+  });
+
+  test('Re-setting a default', () => {
+    expect(QueryString.stringify({
+      filter: {
+        num: "002",
+        b: 3,
+      },
+    }, {
+      initialState: {
+        filter: {
+          num: "002",
+          b: 3,
+        }
+      },
+    })).toBe('');
+  })
 });
 
 describe('Merge Tests', () => {
@@ -192,6 +364,17 @@ describe('Merge Tests', () => {
     )).toBe('a=(b:1;d:e,f;j:(k:l);m:o)&g=h')
   });
 
+  test('Deep Merge 2', () => {
+    expect(QueryString.merge(
+      '?a=(b:(c:d))',
+      {
+        a: { b: { e: 'f' }},
+        'a.b.g': 'h',
+      },
+      { deepMerge: true }
+    )).toBe('a=(b:(c:d;e:f))&a.b.g=h');
+  });
+
   test('Deep Unset', () => {
     expect(QueryString.merge(
       '?a=(b:c;d:e,f;j:(k:l))',
@@ -206,5 +389,69 @@ describe('Merge Tests', () => {
       { page: 1 },
       { initialState: { page: 1, pageSize: 25 }}
     )).toBe('pageSize=10');
+  });
+
+  test('Merge unset a default', () => {
+    expect(QueryString.merge(
+      '?page=5&pageSize=10',
+      { page: null },
+      { initialState: { page: 2, pageSize: 25 } }
+    )).toBe('page=&pageSize=10');
+  });
+
+  test('Merge unset a default 2', () => {
+    expect(QueryString.merge(
+      '?filter=(num:003)',
+      { filter: null }, {
+      initialState: {
+        filter: {
+          num: "002"
+        }
+      }
+    })).toBe('filter=');
+  });
+
+  test('Merge unset a default 3', () => {
+    expect(QueryString.merge(
+      '?page=5&pageSize=10',
+      { }, // empty set of new data - no change
+      { initialState: { page: 2, pageSize: 25 } }
+    )).toBe('page=5&pageSize=10');
+  });
+
+  test('Merge unset a default 4', () => {
+    expect(QueryString.merge(
+      '?page=5',
+      {
+        filter: {
+          b: 3,
+        }
+      },
+      {
+        initialState: {
+          filter: {
+            num: "002",
+            b: 3,
+          }
+        },
+      }
+    )).toBe('page=5&filter=(b:3)');
+  });
+
+  test('Merge unset a default 5', () => {
+    expect(QueryString.merge(
+      '?page=5',
+      {
+        filter: null
+      },
+      {
+        initialState: {
+          filter: {
+            num: "002",
+            b: 3,
+          }
+        },
+      }
+    )).toBe('page=5&filter=');
   });
 });

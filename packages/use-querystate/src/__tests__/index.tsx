@@ -59,8 +59,8 @@ describe('Parsing Tests', () => {
   });
 
   test('Prefix', async () => {
-    history.push('/?d=(page:2)');
-    const result = getHook({ page: 1, pageSize: 10 }, { prefix: 'd' });
+    history.push('/?d.page=2');
+    const result = getHook({ page: 1, pageSize: 10 }, { prefix: 'd.' });
 
     let [qs, setQs] = result.current;
     expect(qs).toStrictEqual({ page: 2, pageSize: 10 });
@@ -71,7 +71,7 @@ describe('Parsing Tests', () => {
 
     [qs, setQs] = result.current;
     expect(qs).toStrictEqual({ page: 3, pageSize: 10 });
-    expect(history.location.search).toBe('?d=(page:3)');
+    expect(history.location.search).toBe('?d.page=3');
   });
 
   test('Batch Updates', async () => {
@@ -100,7 +100,7 @@ describe('Parsing Tests', () => {
     expect(qs).toStrictEqual({ page: 2, pageSize: 10 });
 
     await act(async () => {
-      setQsOrig(pg => ({ page: pg.page + 1 }));
+      setQsOrig(pg => ({ page: pg.page! + 1 }));
     });
 
     let [qs1, setQs1] = result.current;
@@ -109,7 +109,7 @@ describe('Parsing Tests', () => {
     expect(setQs1).toStrictEqual(setQsOrig);
 
     await act(async () => {
-      setQs1(pg => ({ page: pg.page + 1 }));
+      setQs1(pg => ({ page: pg.page! + 1 }));
     });
 
     let [qs2, setQs2] = result.current;
@@ -129,6 +129,132 @@ describe('Parsing Tests', () => {
 
     let [qs] = result.current;
     expect(qs).toStrictEqual({ filter: { amount: '13', op: 'lt' } });
+  });
+
+  test('Removing Defaults', async () => {
+    const result = getHook({ page: 1, pageSize: 10 })
+
+    let [qs, setQs] = result.current;
+    expect(qs).toStrictEqual({ page: 2, pageSize: 10 });
+
+    await act(async () => {
+      setQs({ page: null });
+    });
+
+    [qs, setQs] = result.current;
+    expect(qs).toStrictEqual({ page: null, pageSize: 10 });
+    expect(history.location.search).toBe('?page=');
+  });
+
+  test('Removing defaults part 2', async () => {
+    history.push('/');
+    const result = getHook({
+      filter: {
+        num: "002"
+      }
+    }, {
+      types: {
+        filter: 'object'
+      },
+      filterToTypeDef: true,
+    });
+
+    let [qs, setQs] = result.current;
+    expect(qs).toStrictEqual({ filter: { num: "002" } });
+
+    await act(async () => {
+      setQs({ filter: null });
+    });
+
+    [qs, setQs] = result.current;
+    expect(history.location.search).toBe('?filter=');
+    expect(qs).toStrictEqual({ filter: null });
+  });
+
+  test('Removing defaults part 3', async () => {
+    const result = getHook({
+      filter: {
+        num: "002",
+        b: 3,
+      }
+    }, {
+      types: {
+        filter: {
+          num: 'string',
+          b: 'number'
+        }
+      },
+      filterToTypeDef: true,
+    });
+
+    let [qs, setQs] = result.current;
+    expect(qs).toStrictEqual({ filter: { num: "002", b: 3 } });
+
+    await act(async () => {
+      setQs({ filter: { b: 3 } });
+    });
+
+    [qs, setQs] = result.current;
+    expect(history.location.search).toBe('?page=2&filter=(b:3)');
+    expect(qs).toStrictEqual({ filter: { b: 3} });
+  });
+
+  test('Removing defaults part 4', async () => {
+    history.push('/?page=2&filter=');
+    const result = getHook({
+      filter: {
+        num: "002",
+        b: 3
+      }
+    }, {
+      types: {
+        filter: {
+          num: 'string',
+          b: 'number'
+        }
+      },
+      filterToTypeDef: true,
+    });
+
+    let [qs, setQs] = result.current;
+    expect(qs).toStrictEqual({ filter: null });
+
+    await act(async () => {
+      setQs({ filter: { b: 3 } });
+    });
+
+    [qs, setQs] = result.current;
+    expect(history.location.search).toBe('?page=2&filter=(b:3)');
+    expect(qs).toStrictEqual({ filter: { b: 3 } });
+  });
+
+  test('Removing defaults part 5', async () => {
+    history.push('/?page=2&filter=(b:3)');
+    const result = getHook({
+      filter: {
+        num: "002",
+        b: 3
+      }
+    }, {
+      types: {
+        filter: {
+          num: 'string',
+          b: 'number'
+        }
+      },
+      filterToTypeDef: true,
+    });
+
+    let [qs, setQs] = result.current;
+    expect(qs).toStrictEqual({ filter: { b: 3 } });
+
+    await act(async () => {
+      setQs({ filter: { num: "002", b: 3 } });
+    });
+
+    [qs, setQs] = result.current;
+    expect(history.location.search).toBe('?page=2');
+    expect(qs).toStrictEqual({ filter: { num: "002", b: 3 } });
   });
 
   test('Multi-Hook', async () => {

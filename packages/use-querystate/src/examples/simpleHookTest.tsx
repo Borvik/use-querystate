@@ -16,7 +16,7 @@ export const SimpleHookTest: React.FC = () => {
 
 const SimpleHookUsage: React.FC = () => {
   const renderCount = useRenderCount();
-  const [pages, setPages] = useQueryState({page: 1})
+  const [pages, setPages] = useQueryState({page: 1});
 
   return <>
     <button onClick={() => setPages(prev => prev.page === 1 ? { page : 2} : { page : 1})}>Set Page</button>

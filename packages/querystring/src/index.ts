@@ -4,6 +4,7 @@ import { isset, isStringable } from "./isset";
 import cleanDeep from 'clean-deep';
 import set from 'lodash/set';
 import get from 'lodash/get';
+import has from 'lodash/has';
 import unset from 'lodash/unset';
 import defaultsDeep from 'lodash/defaultsDeep';
 import cloneDeep from 'lodash/cloneDeep';
@@ -12,6 +13,7 @@ import { getObjectPaths } from "./pathTree";
 import { convert } from "./convert";
 import { buildTypeDefs } from "./buildTypeDefs";
 import { isEqual } from "./isEqual";
+import defaults from 'lodash/defaults';
 
 export type { PathTypes } from './types';
 
@@ -25,19 +27,51 @@ export class QueryString {
    */
   static stringify<T extends object, S extends object>(obj: T, options: StringifyOptions<S> = {}): string {
     let objToStringify: unknown = cloneDeep(obj);
+    let topKeysToKeep: Set<string> = new Set();
+    let topKeysToSkip: Set<string> = new Set();
     if (!!options.initialState) {
       let statePaths = getObjectPaths(options.initialState);
       for (let pathKey of statePaths) {
+        if (pathKey.length < 1) continue;
+        if (topKeysToSkip.has(pathKey[0])) continue;
         let curValue = get(objToStringify, pathKey, undefined);
-        if (typeof curValue === 'undefined' || curValue === null)
-          continue;
-        
         let initValue = get(options.initialState, pathKey);
-        if (isEqual(curValue, initValue))
-          unset(objToStringify, pathKey);
+
+        let hasInitialValue = (initValue !== null && typeof initValue !== 'undefined');
+        let hasCurValue = (curValue !== null && typeof curValue !== 'undefined');
+
+        if (pathKey.length === 1) {
+          if (isEqual(curValue, initValue)) {
+            unset(objToStringify, pathKey);
+          }
+          else if (hasInitialValue && !hasCurValue) {
+            set(objToStringify as any, pathKey, '');
+          }
+        }
+        else if (hasInitialValue && hasCurValue) {
+          let topCurValue = get(objToStringify, pathKey[0], undefined);
+          let topInitValue = get(options.initialState, pathKey[0]);
+
+          if (isEqual(topCurValue, topInitValue)) {
+            unset(objToStringify, pathKey[0]);
+            topKeysToSkip.add(pathKey[0]);
+          }
+        }
+        else if (hasInitialValue && !hasCurValue) {
+          set(objToStringify as any, pathKey, null);
+          topKeysToKeep.add(pathKey[0]);
+        }
       }
     }
     objToStringify = cleanDeep(objToStringify, { emptyStrings: false });
+
+    if (topKeysToKeep.size) {
+      for (let key of topKeysToKeep) {
+        if (!has(objToStringify, key)) {
+          set(objToStringify as any, key, '');
+        }
+      }
+    }
 
     let seenObjects: any[] = [];
 
@@ -109,9 +143,15 @@ export class QueryString {
    * @param options Parse options to allow transforming the data to proper types
    */
   static parse<T extends object>(qs: string, options: ParseOptions<T> = {}): Record<string, unknown> {
-    qs = (qs ?? '').trim();
+    qs = (qs ?? '').replace(/^\s*?\?/, '?');
     if (!qs || qs === '?') return options.initialState ?? {};
     if (qs[0] === '?') qs = qs.substr(1);
+
+    // build types (if we can)
+    let typeDefs = options.types;
+    if (!typeDefs && !!options.initialState) {
+      typeDefs = buildTypeDefs(options.initialState);
+    }
 
     let result: Record<string, unknown> = {};
     
@@ -163,24 +203,20 @@ export class QueryString {
       result[decode(key)] = parseValue(value);
     }
 
-    // build types (if we can)
-    let typeDefs = options.types;
-    if (!typeDefs && !!options.initialState) {
-      typeDefs = buildTypeDefs(options.initialState);
-    }
-
     if (typeof typeDefs !== 'undefined') {
       result = convert(
         result,
-        options.definedTuples ?? false,
-        typeDefs,
-        (!!typeDefs && !options.types && !options.lockTypesToInitialState),
-        options.filterToTypeDef ?? false
+        {
+          definedTuples: options.definedTuples ?? false,
+          typeDef: typeDefs,
+          typeDefsFromInitial: (!!typeDefs && !options.types && !options.lockTypesToInitialState),
+          filterToTypeDef: options.filterToTypeDef ?? false,
+        }
       );
     }
 
     if (options.initialState)
-      result = defaultsDeep(result, options.initialState);
+      result = defaults(result, options.initialState);
     return result;
   }
 
@@ -203,7 +239,7 @@ export class QueryString {
     } else {
       let newKeys = Object.keys(newValues) as (keyof T)[];
       for (let key of newKeys) {
-        set(qsObject, key, newValues[key]);
+        qsObject[key as string] = newValues[key];
       }
     }
 

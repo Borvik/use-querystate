@@ -72,8 +72,8 @@ batchedQSUpdate(() => {
 ```typescript
 import { useQueryState } from '@borvik/use-querystate';
 
-const [pagination, setPagination] = useQueryState({page: 1, pageSize: 10}, { prefix: 'my-cmp' });
+const [pagination, setPagination] = useQueryState({page: 1, pageSize: 10}, { prefix: 'my-cmp.' });
 // pagination = {page: 1, pageSize: 10} assuming no query string
 
-setPagination({ page: 2 }); // ?my-cmp=(page:2)
+setPagination({ page: 2 }); // ?my-cmp.page=2
 ```

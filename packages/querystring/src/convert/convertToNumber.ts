@@ -1,4 +1,4 @@
-export function convertToNumber(value: unknown): number | undefined {
+export function convertToNumber(value: unknown): number | undefined | null {
   if (typeof value === 'undefined' || value === null)
     return undefined;
 
@@ -6,7 +6,7 @@ export function convertToNumber(value: unknown): number | undefined {
     throw new Error(`Unable to convert value to number`);
 
   // Special case to allow reading "empty" value from qs
-  if (value === '') return Number.NaN;
+  if (value === '') return null;
 
   if (isNaN(Number(value)))
     throw new Error(`QS value "${value}" cannot be represented as a 'number'.`);
