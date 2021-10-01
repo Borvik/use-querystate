@@ -143,7 +143,7 @@ export class QueryString {
    * @param options Parse options to allow transforming the data to proper types
    */
   static parse<T extends object>(qs: string, options: ParseOptions<T> = {}): Record<string, unknown> {
-    qs = (qs ?? '').trim();
+    qs = (qs ?? '').replace(/^\s*?\?/, '?');
     if (!qs || qs === '?') return options.initialState ?? {};
     if (qs[0] === '?') qs = qs.substr(1);
 

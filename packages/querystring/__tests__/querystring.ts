@@ -29,6 +29,26 @@ describe('Parsing Tests', () => {
     });
   });
 
+  test('     ?a=b', () => {
+    expect(QueryString.parse('   ?a=b')).toEqual({
+      a: 'b'
+    });
+  });
+
+  test('  ?   a   =  b   &   c  =  d  ', () => {
+    expect(QueryString.parse('  ?   a   =  b   &   c  =  d  ')).toEqual({
+      '   a   ': '  b   ',
+      '   c  ': '  d  ',
+    });
+  });
+
+  test('   a   =  b   &   c  =  d  ', () => {
+    expect(QueryString.parse('   a   =  b   &   c  =  d  ')).toEqual({
+      '   a   ': '  b   ',
+      '   c  ': '  d  ',
+    });
+  });
+
   test('a=b&c=d', () => {
     expect(QueryString.parse('a=b&c=d')).toEqual({
       a: 'b',
