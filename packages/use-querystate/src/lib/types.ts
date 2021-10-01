@@ -7,14 +7,6 @@ export interface QueryStateOptions {
   filterToTypeDef?: boolean;
 }
 
-// export type Deep_Nullable<T> = {
-//   [P in keyof T]: T[P] extends (infer U)[]
-//     ? Deep_Nullable<U>[]
-//     : T[P] extends Readonly<infer U>[]
-//       ? Readonly<Deep_Nullable<U> | null>[]
-//       : Deep_Nullable<T[P]> | null
-// };
-
 export type DeepPartial<T> =
   T extends string | number | bigint | boolean | null | undefined | symbol | Date
     ? T | undefined | null
