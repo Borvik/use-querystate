@@ -2,6 +2,23 @@
   "name": "@borvik/use-querystate",
   "entries": [
     {
+      "version": "3.0.0",
+      "tag": "@borvik/use-querystate_v3.0.0",
+      "date": "Fri, 01 Oct 2021 10:56:14 GMT",
+      "comments": {
+        "major": [
+          {
+            "comment": "Changes to how prefixing works to support the ability to clear/override initial values"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@borvik/querystring\" from `^2.0.1` to `^3.0.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "2.0.2",
       "tag": "@borvik/use-querystate_v2.0.2",
       "date": "Mon, 13 Sep 2021 17:53:25 GMT",

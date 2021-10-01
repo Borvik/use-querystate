@@ -1,6 +1,13 @@
 # Change Log - @borvik/querystring
 
-This log was last generated on Fri, 05 Mar 2021 12:45:44 GMT and should not be manually modified.
+This log was last generated on Fri, 01 Oct 2021 10:56:14 GMT and should not be manually modified.
+
+## 3.0.0
+Fri, 01 Oct 2021 10:56:14 GMT
+
+### Breaking changes
+
+- Clear/override initial values - changes how defaults are applied and allows more nulls to return to replace initial values
 
 ## 2.0.1
 Fri, 05 Mar 2021 12:45:44 GMT
