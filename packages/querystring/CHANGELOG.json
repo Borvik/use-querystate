@@ -2,6 +2,18 @@
   "name": "@borvik/querystring",
   "entries": [
     {
+      "version": "3.0.1",
+      "tag": "@borvik/querystring_v3.0.1",
+      "date": "Tue, 13 Dec 2022 14:29:18 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Updated library to properly filter \"undefined\" for initial value checks"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.0.0",
       "tag": "@borvik/querystring_v3.0.0",
       "date": "Fri, 01 Oct 2021 10:56:14 GMT",

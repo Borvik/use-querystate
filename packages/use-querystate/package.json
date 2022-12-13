@@ -52,7 +52,7 @@
     "ts-node": "~9.1.1"
   },
   "dependencies": {
-    "@borvik/querystring": "^3.0.0"
+    "@borvik/querystring": "^3.0.1"
   },
   "peerDependencies": {
     "react": "^16.13.1",

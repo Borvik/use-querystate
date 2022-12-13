@@ -1,6 +1,13 @@
 # Change Log - @borvik/querystring
 
-This log was last generated on Fri, 01 Oct 2021 10:56:14 GMT and should not be manually modified.
+This log was last generated on Tue, 13 Dec 2022 14:29:18 GMT and should not be manually modified.
+
+## 3.0.1
+Tue, 13 Dec 2022 14:29:18 GMT
+
+### Patches
+
+- Updated library to properly filter "undefined" for initial value checks
 
 ## 3.0.0
 Fri, 01 Oct 2021 10:56:14 GMT
