@@ -52,6 +52,19 @@ export class QueryString {
           let topCurValue = get(objToStringify, pathKey[0], undefined);
           let topInitValue = get(options.initialState, pathKey[0]);
 
+          // filter out properties marked undefined
+          if (topCurValue && typeof topCurValue === 'object') {
+            topCurValue = JSON.parse(JSON.stringify(topCurValue, (_k, value) => {
+              return typeof value === 'undefined' || value === null ? undefined : value;
+            }));
+          }
+
+          if (topInitValue && typeof topInitValue === 'object') {
+            topInitValue = JSON.parse(JSON.stringify(topInitValue, (_k, value) => {
+              return typeof value === 'undefined' || value === null ? undefined : value;
+            }));
+          }
+
           if (isEqual(topCurValue, topInitValue)) {
             unset(objToStringify, pathKey[0]);
             topKeysToSkip.add(pathKey[0]);

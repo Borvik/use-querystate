@@ -340,7 +340,30 @@ describe('Stringify Tests', () => {
         }
       },
     })).toBe('');
-  })
+  });
+
+  test('Setting with undefined', () => {
+    expect(QueryString.stringify({
+      "page": 1,
+      "search": "",
+      "filter": {
+        "end_time_from": "now",
+        "end_time_to": undefined
+      },
+      "sort": [],
+      "pageSize": 25
+    }, {
+      initialState: {
+        "page": 1,
+        "pageSize": 25,
+        "search": "",
+        "sort": [],
+        "filter": {
+          "end_time_from": "now"
+        }
+      }
+    })).toBe('');
+  });
 });
 
 describe('Merge Tests', () => {
