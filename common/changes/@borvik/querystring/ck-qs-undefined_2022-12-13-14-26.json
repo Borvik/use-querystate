@@ -1,0 +1,11 @@
+{
+  "changes": [
+    {
+      "packageName": "@borvik/querystring",
+      "comment": "Updated library to properly filter \"undefined\" for initial value checks",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@borvik/querystring",
+  "email": "ckolkman@treorisoft.com"
+}
