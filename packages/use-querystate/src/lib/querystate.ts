@@ -1,5 +1,5 @@
 import { useCallback, useDebugValue, useRef, useState } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useHistory } from './history';
 import { getQueryState } from './getQueryState';
 import { DeepPartial, QueryStateOptions } from "./types";
 import { isEqual } from '@borvik/querystring/dist/isEqual';

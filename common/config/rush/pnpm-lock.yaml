@@ -14143,6 +14143,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-ytxQvrb1cPc9WBEI/HSeYYoGD0kWnGEOR8RY6KomWLBVhqz0RgTwVO9dLrGz7dC+nN9llyI7OKAgRq8Vq4ZBSw==
+  /tiny-invariant/1.3.1:
+    dev: false
+    resolution:
+      integrity: sha512-AD5ih2NlSssTCwsMznbvwMZpJ1cbhkGd2uueNxzv2jDlEeZdU04JQfRnggJQ8DrcVBGjAsCKwFBbDlVNtEMlzw==
   /tiny-warning/1.0.3:
     dev: false
     resolution:
@@ -15394,6 +15398,7 @@ packages:
     dependencies:
       '@types/jest': 26.0.20
       '@types/lodash': 4.14.168
+      '@types/node': 12.19.16
       clean-deep: 3.4.0
       jest: 26.6.3_ts-node@9.1.1
       lodash: 4.17.20
@@ -15406,7 +15411,7 @@ packages:
     peerDependencies:
       ts-node: '*'
     resolution:
-      integrity: sha512-DlusojErY+Ykg6j6rC8jhuqvyToVY7bh3DxlSNe9BObox5aEDKEDs8yEdHQJ0aIwYengk66Z7NrbEOpF34hGmQ==
+      integrity: sha512-KOVYdupOGIpjgE2IEiN64IZYoEUZz8OCjwRWs4IVCyrtJdO4meGMO3f18h/TwohZbALOQ7vtS40sbASAAM+jJg==
       tarball: 'file:projects/querystring.tgz'
     version: 0.0.0
   'file:projects/use-querystate.tgz':
@@ -15444,6 +15449,7 @@ packages:
       rimraf: 3.0.2
       sass-loader: 8.0.2_node-sass@4.14.1+webpack@4.46.0
       style-loader: 1.3.0_webpack@4.46.0
+      tiny-invariant: 1.3.1
       ts-jest: 26.5.0_jest@26.6.3+typescript@3.8.3
       ts-loader: 7.0.5_typescript@3.8.3
       ts-node: 9.1.1_typescript@3.8.3
@@ -15454,7 +15460,7 @@ packages:
     dev: false
     name: '@rush-temp/use-querystate'
     resolution:
-      integrity: sha512-FgxdZCxb9Yxtke0RziBk0ghW1a+ZzL7htU7Ok71LsBf37DeGCUSqghQRpFqVd9iv41GqgxNAriQVJ1htunmg6w==
+      integrity: sha512-Ts+CpQ3HRiL3E7YheDcKFNVotMqQmMh+Jh+d2MAvXe8XYi6UsjBvpHTkdXduFvj0VnyK4G6BlYUaihMKa8SysA==
       tarball: 'file:projects/use-querystate.tgz'
     version: 0.0.0
 registry: ''

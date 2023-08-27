@@ -5,11 +5,14 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './index.css';
 import App from './examples/App';
+import { HistoryProvider } from './examples/historyProvider';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<>
     <Router>
-      <App />
+      <HistoryProvider>
+        <App />
+      </HistoryProvider>
     </Router>
   </>,
   document.getElementById('root')

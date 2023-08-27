@@ -1,17 +1,13 @@
-import { useHistory } from 'react-router-dom';
 import { getQueryString } from './getQueryString';
-
-type HistoryType = ReturnType<typeof useHistory>;
-type HistoryCreateRefProps = Parameters<HistoryType['createHref']>;
-type LocationDescriptorObject = HistoryCreateRefProps[0];
+import type { HistoryType, LocationDescriptor } from './history/types';
 
 let batchedHistoryObj: HistoryType | null;
-let batchUpdateLoc: LocationDescriptorObject | null;
+let batchUpdateLoc: LocationDescriptor | null;
 export const BATCHING_UPDATES = {
   current: false
 };
 
-export function performBatchedUpdate(history: HistoryType, location: LocationDescriptorObject, newState: any, initialState: any, optionPrefix?: string): void {
+export function performBatchedUpdate(history: HistoryType, location: LocationDescriptor, newState: any, initialState: any, optionPrefix?: string): void {
   if (!batchUpdateLoc) {
     batchUpdateLoc = location;
     batchedHistoryObj = history;

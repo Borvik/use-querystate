@@ -9,3 +9,5 @@ export {
 export type {
   QueryStateOptions
 } from './types';
+
+export * from './history';
