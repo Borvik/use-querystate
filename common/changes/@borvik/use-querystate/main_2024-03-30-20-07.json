@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@borvik/use-querystate",
+      "comment": "Updated peerDependencies version rules",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@borvik/use-querystate"
+}
