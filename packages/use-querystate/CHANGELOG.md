@@ -1,6 +1,13 @@
 # Change Log - @borvik/use-querystate
 
-This log was last generated on Fri, 01 Oct 2021 10:56:14 GMT and should not be manually modified.
+This log was last generated on Mon, 01 Apr 2024 10:33:20 GMT and should not be manually modified.
+
+## 3.0.1
+Mon, 01 Apr 2024 10:33:20 GMT
+
+### Patches
+
+- Updated peerDependencies version rules
 
 ## 3.0.0
 Fri, 01 Oct 2021 10:56:14 GMT
