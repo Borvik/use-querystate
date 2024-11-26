@@ -398,6 +398,11 @@
       "packageName": "@borvik/use-querystate",
       "projectFolder": "packages/use-querystate",
       "shouldPublish": true
+    },
+    {
+      "packageName": "qs-test-app",
+      "projectFolder": "test-app",
+      "shouldPublish": false
     }
     // {
     //   /**
