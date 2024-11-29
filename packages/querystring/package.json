@@ -24,7 +24,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "clean-deep": "~3.4.0",
     "lodash": "~4.17.20"
   },
   "devDependencies": {
