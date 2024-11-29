@@ -9,11 +9,11 @@ export function getObjectPaths<T extends {}>(obj: T, includeArrayIndicies: boole
   for (let i = 0; i < objKeys.length; i++) {
     let k = objKeys[i];
     let v = obj[k as keyof T];
-    let t = typeof v;
+
     let currentPath = [...parentKey, k];
     // console.log('Checking', {k, v, t, currentPath});
 
-    if (v === null || SCALAR_TYPES.includes(t)) {
+    if (v === null || SCALAR_TYPES.includes(typeof v)) {
       paths.push(currentPath);
     }
     else if (Array.isArray(v)) {
@@ -25,7 +25,7 @@ export function getObjectPaths<T extends {}>(obj: T, includeArrayIndicies: boole
         }));
       }
     }
-    else if (t === 'object') {
+    else if (typeof v === 'object') {
       let subPaths = getObjectPaths(v, includeArrayIndicies, currentPath);
       paths = paths.concat(subPaths);
     }

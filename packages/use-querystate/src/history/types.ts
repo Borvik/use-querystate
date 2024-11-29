@@ -13,7 +13,7 @@ export interface Location {
 }
 
 export interface HistoryType {
-  location: Location
+  // location: Location
   push(path: string, state?: unknown): void
   push(location: LocationDescriptor): void
 }

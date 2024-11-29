@@ -25,9 +25,12 @@
     "noEmit": true
   },
   "files": [
-    "src/lib/index.ts"
+    "src/index.ts"
   ],
   "include": [
-    "src/lib/**/*"
+    "src/**/*"
+  ],
+  "exclude": [
+    "src/__tests__/**/*"
   ]
 }

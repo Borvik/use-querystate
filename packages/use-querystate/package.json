@@ -1,19 +1,17 @@
 {
   "name": "@borvik/use-querystate",
-  "version": "3.0.0",
+  "version": "3.0.1",
+  "license": "MIT",
+  "repository": "github:Borvik/use-querystate",
   "bugs": {
     "url": "https://github.com/Borvik/use-querystate/issues"
   },
-  "repository": "github:Borvik/use-querystate",
-  "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rimraf dist && npx tsc -p tsconfig.prod.json",
     "build:dev": "webpack --mode development",
-    "eject": "react-scripts eject",
-    "start": "react-scripts start",
     "test": "jest"
   },
   "browserslist": {
@@ -38,7 +36,7 @@
   "devDependencies": {
     "@types/history": "~4.7.8",
     "@types/jest": "~29.5.14",
-    "@types/lodash": "~4.14.168",
+    "@types/lodash": "4.14.168",
     "@types/node": "^20",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",

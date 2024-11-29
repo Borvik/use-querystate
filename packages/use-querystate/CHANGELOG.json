@@ -2,6 +2,18 @@
   "name": "@borvik/use-querystate",
   "entries": [
     {
+      "version": "3.0.1",
+      "tag": "@borvik/use-querystate_v3.0.1",
+      "date": "Mon, 01 Apr 2024 10:33:20 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Updated peerDependencies version rules"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.0.0",
       "tag": "@borvik/use-querystate_v3.0.0",
       "date": "Fri, 01 Oct 2021 10:56:14 GMT",

@@ -1,5 +1,5 @@
 import { useCallback, useDebugValue, useRef, useState } from 'react';
-import { useLocation, useHistory } from './history';
+import { useLocation, useHistory, Location } from './history';
 import { getQueryState } from './getQueryState';
 import { DeepPartial, QueryStateOptions } from "./types";
 import { isEqual } from '@borvik/querystring/dist/isEqual';
@@ -12,10 +12,12 @@ type NewState<State> = (Partial<State> | ((state: State) => Partial<State>));
 
 export function useQueryState<State extends object>(initialState: State, options?: QueryStateOptions): [DeepPartial<State>, (newState: DeepPartial<State> | ((state: DeepPartial<State>) => DeepPartial<State>)) => void] {
   const [,setRerender] = useState(1);
+  const localLocation = useRef<Location | null>(null);
   const localRef = useRef<LocalState<DeepPartial<State>>>({init: false});
   const location = useLocation();
   const history = useHistory();
 
+  localLocation.current = location;
   let currPublicState: DeepPartial<State>;
   if (!localRef.current.init || (!options?.internalState && location.search !== localRef.current.search)) {
     let potentialPublicState = options?.internalState
@@ -54,11 +56,11 @@ export function useQueryState<State extends object>(initialState: State, options
     const publicState = { ...localRef.current.publicState, ...mergeState };
 
     if (BATCHING_UPDATES.current && !useInternalState) {
-      performBatchedUpdate(history, history.location, mergeState, derivedInitialState, prefix);
+      performBatchedUpdate(history, localLocation.current!, mergeState, derivedInitialState, prefix);
       return;
     }
 
-    let newQS = getQueryString(history.location.search, publicState, derivedInitialState, prefix);
+    let newQS = getQueryString(localLocation.current!.search, publicState, derivedInitialState, prefix);
     if (!useInternalState) {
       history.push({
         ...location,
@@ -70,7 +72,7 @@ export function useQueryState<State extends object>(initialState: State, options
     }
     // eslint warns about including `history` and `location` not being included, except that actually _breaks_ functionality
     // eslint-disable-next-line
-  }, [localRef, setRerender, useInternalState, prefix, derivedInitialState]);
+  }, [localRef, localLocation, setRerender, useInternalState, prefix, derivedInitialState]);
 
   useDebugValue(currPublicState);
   return [currPublicState, publicSetState];

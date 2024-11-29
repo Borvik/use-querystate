@@ -10,4 +10,10 @@ export type {
   QueryStateOptions
 } from './types';
 
-export * from './history';
+export {
+  HistoryContext,
+  HistoryContextProvider,
+  type HistoryType,
+  type Location,
+  type LocationDescriptor
+} from './history';

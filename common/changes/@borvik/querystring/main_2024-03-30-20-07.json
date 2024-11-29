@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@borvik/querystring",
+      "comment": "Locked @types/lodash to match use-querystate",
+      "type": "none"
+    }
+  ],
+  "packageName": "@borvik/querystring"
+}
