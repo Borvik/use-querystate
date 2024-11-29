@@ -19,14 +19,8 @@ function useDefaultHistory(): HistoryType {
   invariant(window, 'You should not use "useHistory" outside of a <HistoryProvider>');
   
   const globalHistory = window.history;
-  const globalLocation = window.location;
 
   return useMemo(() => ({
-    location: {
-      pathname: globalLocation?.pathname || '/',
-      search: globalLocation?.search || '',
-      hash: globalLocation?.hash || '',
-    },
     push: (pathOrLocation: string | LocationDescriptor, state?: unknown) => {
       if (typeof pathOrLocation === 'string') {
         globalHistory?.pushState(state, '', pathOrLocation);
@@ -36,7 +30,7 @@ function useDefaultHistory(): HistoryType {
         globalHistory?.pushState(pathOrLocation.state, '', url);
       }
     }
-  }), [globalHistory, globalLocation]);
+  }), [globalHistory]);
 }
 
 function useDefaultLocation(): Location {
