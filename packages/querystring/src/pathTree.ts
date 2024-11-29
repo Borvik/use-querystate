@@ -1,4 +1,4 @@
-import { SCALAR_TYPES } from "./types";
+import { SCALAR_TYPES } from "./types.js";
 
 export function getObjectPaths<T extends {}>(obj: T, includeArrayIndicies: boolean = false, parentKey: string[] = []): string[][] {
   if (!obj) return [];

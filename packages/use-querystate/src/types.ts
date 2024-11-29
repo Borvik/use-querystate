@@ -1,4 +1,4 @@
-import { PathTypes } from '@borvik/querystring';
+import type { PathTypes } from '@borvik/querystring';
 
 export interface QueryStateOptions {
   prefix?: string; // prefix for the container to this set of values

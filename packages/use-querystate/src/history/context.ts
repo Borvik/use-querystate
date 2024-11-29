@@ -1,6 +1,6 @@
 import { createContext, useMemo } from 'react';
 import invariant from 'tiny-invariant';
-import type { HistoryType, LocationDescriptor, Location } from './types';
+import type { HistoryType, LocationDescriptor, Location } from './types.js';
 
 interface IHistoryContext {
   useHistory: () => HistoryType

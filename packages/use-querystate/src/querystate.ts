@@ -1,11 +1,11 @@
 import { useCallback, useDebugValue, useRef, useState } from 'react';
-import { useLocation, useHistory, Location } from './history';
-import { getQueryState } from './getQueryState';
-import { DeepPartial, QueryStateOptions } from "./types";
+import { useLocation, useHistory, Location } from './history/index.js';
+import { getQueryState } from './getQueryState.js';
+import { DeepPartial, QueryStateOptions } from "./types.js";
 import { isEqual } from '@borvik/querystring/dist/isEqual';
-import { useDeepDerivedState } from './useDeepDerivedState';
-import { BATCHING_UPDATES, performBatchedUpdate } from './batchUpdates';
-import { getQueryString } from './getQueryString';
+import { useDeepDerivedState } from './useDeepDerivedState.js';
+import { BATCHING_UPDATES, performBatchedUpdate } from './batchUpdates.js';
+import { getQueryString } from './getQueryString.js';
 
 type LocalState<State> = {init: false} | {init: true, publicState: State, search: string};
 type NewState<State> = (Partial<State> | ((state: State) => Partial<State>));

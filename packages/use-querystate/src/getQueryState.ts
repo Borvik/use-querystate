@@ -1,5 +1,5 @@
 import { PathTypes, QueryString } from '@borvik/querystring';
-import { DeepPartial, QueryStateOptions } from "./types";
+import { DeepPartial, QueryStateOptions } from "./types.js";
 
 export function getQueryState<State extends object>(queryString: string, initialState: State, options?: QueryStateOptions): DeepPartial<State> {
   let typeDefs = options?.types;

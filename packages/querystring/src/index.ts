@@ -1,21 +1,20 @@
-import { encode, decode } from "./encoder";
-import { splitCommas } from "./splitCommas";
-import { isset, isStringable } from "./isset";
-import cleanDeep from 'clean-deep';
-import set from 'lodash/set';
-import get from 'lodash/get';
-import has from 'lodash/has';
-import unset from 'lodash/unset';
-import defaultsDeep from 'lodash/defaultsDeep';
-import cloneDeep from 'lodash/cloneDeep';
-import { MergeOptions, ParseOptions, StringifyOptions } from "./types";
-import { getObjectPaths } from "./pathTree";
-import { convert } from "./convert";
-import { buildTypeDefs } from "./buildTypeDefs";
-import { isEqual } from "./isEqual";
-import defaults from 'lodash/defaults';
+import { encode, decode } from "./encoder.js";
+import { splitCommas } from "./splitCommas.js";
+import { isset, isStringable } from "./isset.js";
+import { cleanDeep } from './cleanDeep.js';
+import set from 'lodash/set.js';
+import get from 'lodash/get.js';
+import has from 'lodash/has.js';
+import unset from 'lodash/unset.js';
+import cloneDeep from 'lodash/cloneDeep.js';
+import { MergeOptions, ParseOptions, StringifyOptions } from "./types.js";
+import { getObjectPaths } from "./pathTree.js";
+import { convert } from "./convert/index.js";
+import { buildTypeDefs } from "./buildTypeDefs.js";
+import { isEqual } from "./isEqual.js";
+import defaults from 'lodash/defaults.js';
 
-export type { PathTypes } from './types';
+export type { PathTypes } from './types.js';
 
 export class QueryString {
 
@@ -76,7 +75,7 @@ export class QueryString {
         }
       }
     }
-    objToStringify = cleanDeep(objToStringify, { emptyStrings: false });
+    objToStringify = cleanDeep(objToStringify as any, { emptyStrings: false });
 
     if (topKeysToKeep.size) {
       for (let key of topKeysToKeep) {

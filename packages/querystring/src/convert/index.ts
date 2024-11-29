@@ -1,10 +1,10 @@
-import { getObjectPaths } from "../pathTree";
-import { PathTypes, validQSTypes, isValidQSType } from "../types";
-import { convertValue } from './convertValue';
-import get from 'lodash/get';
-import set from 'lodash/set';
-import has from 'lodash/has';
-import cloneDeep from 'lodash/cloneDeep';
+import { getObjectPaths } from "../pathTree.js";
+import { PathTypes, validQSTypes, isValidQSType } from "../types.js";
+import { convertValue } from './convertValue.js';
+import get from 'lodash/get.js';
+import set from 'lodash/set.js';
+import has from 'lodash/has.js';
+import cloneDeep from 'lodash/cloneDeep.js';
 
 interface ConvertOptions {
   definedTuples?: boolean

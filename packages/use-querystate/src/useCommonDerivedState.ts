@@ -1,7 +1,7 @@
 // Adapted from: https://hackernoon.com/whats-the-right-way-to-fetch-data-in-react-hooks-a-deep-dive-2jc13230
 
 import { useState, useCallback, useRef } from 'react';
-import { ComparatorFn } from './comparators';
+import { ComparatorFn } from './comparators.js';
 
 type LocalState<State> = {init: false} | {init: true, publicState: State, depList: any[]};
 

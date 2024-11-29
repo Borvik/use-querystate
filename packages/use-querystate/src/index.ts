@@ -1,14 +1,14 @@
 export {
   useQueryState
-} from './querystate';
+} from './querystate.js';
 
 export {
   batchedQSUpdate
-} from './batchUpdates';
+} from './batchUpdates.js';
 
 export type {
   QueryStateOptions
-} from './types';
+} from './types.js';
 
 export {
   HistoryContext,
@@ -16,4 +16,4 @@ export {
   type HistoryType,
   type Location,
   type LocationDescriptor
-} from './history';
+} from './history/index.js';

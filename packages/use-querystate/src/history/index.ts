@@ -1,4 +1,4 @@
-export { useHistory } from './useHistory';
-export { useLocation } from './useLocation';
-export * from './context';
-export * from './types';
+export { useHistory } from './useHistory.js';
+export { useLocation } from './useLocation.js';
+export * from './context.js';
+export * from './types.js';

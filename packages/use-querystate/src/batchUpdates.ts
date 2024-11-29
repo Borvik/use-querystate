@@ -1,5 +1,5 @@
-import { getQueryString } from './getQueryString';
-import type { HistoryType, LocationDescriptor } from './history/types';
+import { getQueryString } from './getQueryString.js';
+import type { HistoryType, LocationDescriptor } from './history/types.js';
 
 let batchedHistoryObj: HistoryType | null;
 let batchUpdateLoc: LocationDescriptor | null;

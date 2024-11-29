@@ -1,8 +1,8 @@
-import { isset } from "../isset";
-import { isValidQSType, typeofWithArrays } from "../types";
-import { convertToBigInt } from "./convertToBigInt";
-import { convertToBoolean } from "./convertToBoolean";
-import { convertToNumber } from "./convertToNumber";
+import { isset } from "../isset.js";
+import { isValidQSType, typeofWithArrays } from "../types.js";
+import { convertToBigInt } from "./convertToBigInt.js";
+import { convertToBoolean } from "./convertToBoolean.js";
+import { convertToNumber } from "./convertToNumber.js";
 
 export function convertValue(value: unknown, toType: typeofWithArrays) {
   if (!isValidQSType(toType))
