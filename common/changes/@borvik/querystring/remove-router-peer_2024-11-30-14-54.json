@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@borvik/querystring",
+      "comment": "Add dual CJS/ESM builds!",
+      "type": "major"
+    }
+  ],
+  "packageName": "@borvik/querystring"
+}
