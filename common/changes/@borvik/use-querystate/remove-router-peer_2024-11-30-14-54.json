@@ -2,7 +2,7 @@
   "changes": [
     {
       "packageName": "@borvik/use-querystate",
-      "comment": "Dual CJS/ESM builds!",
+      "comment": "Add dual CJS/ESM builds!",
       "type": "major"
     },
     {
