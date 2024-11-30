@@ -2,6 +2,36 @@ import React, { useRef } from 'react';
 import { useRenderCount } from './useRenderCount';
 import { batchedQSUpdate, useQueryState } from '@borvik/use-querystate';
 import { useTestingState } from '~/lib/testState';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+
+const SampleCode = `import React from 'react';
+import { batchedQSUpdate, useQueryState } from '@borvik/use-querystate';
+
+/**
+ * Properly toggles "page" between 1 and 2, while also
+ * toggling "pageSize" between 15 and 50.
+ * 
+ * Could also make it part of the same state and just use the "simple"
+ * version to do both at once.
+ */
+const SafeMultiHookUsage: React.FC = () => {
+  const [page, setPages] = useQueryState({page: 1})
+  const [pageSize, setPageSize] = useQueryState({pageSize: 15});
+  
+  return <>
+    <button onClick={() => {
+      batchedQSUpdate(() => {
+        setPages(prev => prev.page === 1 ? { page : 2 } : { page : 1 })
+        setPageSize(prev => prev.pageSize === 15 ? { pageSize : 50} : { pageSize : 15 })
+      });
+    }}>Set Page/Size</button>
+    <pre>
+      Current: {JSON.stringify({ page: page.page, pageSize: pageSize.pageSize })}
+    </pre>
+  </>
+}
+`;
 
 export const SafeMultiHookTest: React.FC = () => {
   const [running, toggle] = useTestingState('mulit-safe');
@@ -11,7 +41,10 @@ export const SafeMultiHookTest: React.FC = () => {
       <span className='block'>Safe Multi Hook Usage</span>
       <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={toggle}>{running ? 'Stop' : 'Start'}</button>
     </header>
-    {running && <SafeMultiHookUsage />}
+    {running && <>
+      <SafeMultiHookUsage />
+      <SyntaxHighlighter language='typescript' style={vscDarkPlus}>{SampleCode}</SyntaxHighlighter>
+    </>}
   </article>
 }
 
