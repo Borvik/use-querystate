@@ -12,7 +12,7 @@ So in an effort to work with more frameworks, the `HistoryProvider` is meant to 
 
 Since this library originally used `react-router` the functions resemble those originally provided by that library.
 
-You can see an example of constructing the provider and it's use in the following files: `src/examples/historyProvider.tsx` and `src/index.tsx`.
+You can see an example of constructing the provider and it's use in the following files (from the main monorepo): `test-app/app/components/historyProvider.tsx` and `test-app/app/root.tsx`.
 
 ### **Syntax**
 > const [state, setState] = useQueryState(initialState[, options])
