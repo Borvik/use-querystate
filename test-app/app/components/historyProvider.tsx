@@ -19,7 +19,7 @@ function useHistory(): HistoryType {
         navigate(loc, { state: pathState });
       }
     }
-  }), [location, navigate]);
+  }), [navigate]);
 }
 
 const HISTORY_VALUE = {
