@@ -2,6 +2,31 @@
   "name": "@borvik/use-querystate",
   "entries": [
     {
+      "version": "4.0.0",
+      "tag": "@borvik/use-querystate_v4.0.0",
+      "date": "Wed, 04 Dec 2024 11:23:08 GMT",
+      "comments": {
+        "major": [
+          {
+            "comment": "Add dual CJS/ESM builds!"
+          },
+          {
+            "comment": "Breaking: Removed dependency on react-router! `useLocation` and `useHistory` hooks _should_ be provided using a `<HistoryProvider>` (see readme and sample app)."
+          }
+        ],
+        "none": [
+          {
+            "comment": "Gutted built-in test app (`create-react-app` no longer supported) and externalized it.  React unit tests no longer work."
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@borvik/querystring\" from `^3.0.1` to `^4.0.0`"
+          }
+        ]
+      }
+    },
+    {
       "version": "3.0.1",
       "tag": "@borvik/use-querystate_v3.0.1",
       "date": "Mon, 01 Apr 2024 10:33:20 GMT",

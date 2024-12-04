@@ -1,6 +1,6 @@
 {
   "name": "@borvik/use-querystate",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "license": "MIT",
   "repository": "github:Borvik/use-querystate",
   "bugs": {
@@ -34,7 +34,7 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "@borvik/querystring": "^3.0.1",
+    "@borvik/querystring": "^4.0.0",
     "tiny-invariant": "~1.3.1"
   },
   "devDependencies": {

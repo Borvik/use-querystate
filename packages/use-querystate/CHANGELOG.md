@@ -1,6 +1,14 @@
 # Change Log - @borvik/use-querystate
 
-This log was last generated on Mon, 01 Apr 2024 10:33:20 GMT and should not be manually modified.
+This log was last generated on Wed, 04 Dec 2024 11:23:08 GMT and should not be manually modified.
+
+## 4.0.0
+Wed, 04 Dec 2024 11:23:08 GMT
+
+### Breaking changes
+
+- Add dual CJS/ESM builds!
+- Breaking: Removed dependency on react-router! `useLocation` and `useHistory` hooks _should_ be provided using a `<HistoryProvider>` (see readme and sample app).
 
 ## 3.0.1
 Mon, 01 Apr 2024 10:33:20 GMT
