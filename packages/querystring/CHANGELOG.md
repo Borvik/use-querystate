@@ -1,6 +1,13 @@
 # Change Log - @borvik/querystring
 
-This log was last generated on Tue, 13 Dec 2022 14:29:18 GMT and should not be manually modified.
+This log was last generated on Wed, 04 Dec 2024 11:23:08 GMT and should not be manually modified.
+
+## 4.0.0
+Wed, 04 Dec 2024 11:23:08 GMT
+
+### Breaking changes
+
+- Add dual CJS/ESM builds!
 
 ## 3.0.1
 Tue, 13 Dec 2022 14:29:18 GMT

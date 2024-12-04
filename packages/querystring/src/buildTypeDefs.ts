@@ -1,7 +1,7 @@
-import { getObjectPaths } from "./pathTree";
-import { isValidQSType, PathTypes } from "./types";
-import get from 'lodash/get';
-import set from 'lodash/set';
+import { getObjectPaths } from "./pathTree.js";
+import { isValidQSType, PathTypes } from "./types.js";
+import get from 'lodash/get.js';
+import set from 'lodash/set.js';
 
 export function buildTypeDefs<T extends object>(initialState: T): PathTypes {
   let dataTypes: PathTypes = {};

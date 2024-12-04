@@ -4,6 +4,16 @@
 
 There are two parts to this hook - first the hook itself, and then a batch function which provides a way to consolidate multiple query state changes together into one location update.
 
+### Requirements
+
+To work properly (and at all with SSR) you need to wrap your application in a `HistoryProvider`. This is because this library makes use of the history api in order to change the query string, but different React libraries handle updates to the url differently (ex. `react-router` vs. `next.js`).
+
+So in an effort to work with more frameworks, the `HistoryProvider` is meant to pass down the functions necessary to work with the history api.
+
+Since this library originally used `react-router` the functions resemble those originally provided by that library.
+
+You can see an example of constructing the provider and it's use in the following files (from the main monorepo): `test-app/app/components/historyProvider.tsx` and `test-app/app/root.tsx`.
+
 ### **Syntax**
 > const [state, setState] = useQueryState(initialState[, options])
 

@@ -1,20 +1,19 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2022",
     "lib": [
       "dom",
-      "dom.iterable",
-      "es2020"
+      "ES2022"
     ],
     "allowJs": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "removeComments": true,
@@ -22,12 +21,15 @@
     "jsx": "react",
     "declaration": true,
     "outDir": "./dist",
-    "noEmit": true
+    "noEmit": false
   },
   "files": [
-    "src/lib/index.ts"
+    "src/index.ts"
   ],
   "include": [
-    "src/lib/**/*"
+    "src/**/*"
+  ],
+  "exclude": [
+    "src/__tests__/**/*"
   ]
 }

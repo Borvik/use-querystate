@@ -2,8 +2,13 @@ import React from 'react';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
 import { renderHook, act } from '@testing-library/react-hooks';
-import { useQueryState, batchedQSUpdate } from '../lib';
-import { QueryStateOptions } from '../lib/types';
+import { useQueryState, batchedQSUpdate } from '..';
+import { QueryStateOptions } from '../types';
+import { HistoryProvider } from '../examples/historyProvider';
+
+/**
+ * Tests no longer work... how to properly test now?...
+ */
 
 const BASE_URL = '/?page=2';
 const history = createMemoryHistory({ initialEntries: [ BASE_URL ] });
@@ -13,7 +18,9 @@ function getHook<T extends object>(initialState: T, options?: QueryStateOptions)
     wrapper: ({ children }) => (
       <>
         <Router history={history}>
-          {children}
+          <HistoryProvider>
+            {children}
+          </HistoryProvider>
         </Router>
       </>
     )

@@ -51,6 +51,7 @@ jspm_packages/
 
 # dotenv environment variables file
 .env
+!.env.example
 
 # next.js build output
 .next
@@ -63,6 +64,10 @@ common/deploy/
 common/temp/
 common/autoinstallers/*/.npmrc
 **/.rush/temp/
+node_modules
 
 # Build directories
 dist
+.react-router
+build
+*.tsbuildinfo
