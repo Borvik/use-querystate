@@ -7,6 +7,7 @@ export {
 } from './batchUpdates.js';
 
 export type {
+  DeepPartial,
   QueryStateOptions
 } from './types.js';
 

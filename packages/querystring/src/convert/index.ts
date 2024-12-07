@@ -91,3 +91,5 @@ function getPathTypes(typeDef: PathTypes, definedTuples: boolean): Map<string, v
   }
   return result;
 }
+
+export { convertValue };

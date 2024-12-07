@@ -9,12 +9,13 @@ import unset from 'lodash/unset.js';
 import cloneDeep from 'lodash/cloneDeep.js';
 import { MergeOptions, ParseOptions, StringifyOptions } from "./types.js";
 import { getObjectPaths } from "./pathTree.js";
-import { convert } from "./convert/index.js";
+import { convert, convertValue } from "./convert/index.js";
 import { buildTypeDefs } from "./buildTypeDefs.js";
 import { isEqual } from "./isEqual.js";
 import defaults from 'lodash/defaults.js';
 
-export type { PathTypes } from './types.js';
+export type { PathTypes, QueryStringFilterTypes } from './types.js';
+export { convertValue };
 
 export class QueryString {
 

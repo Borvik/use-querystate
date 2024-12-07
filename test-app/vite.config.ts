@@ -22,5 +22,8 @@ export default defineConfig({
         NODE_MODULES,
       ]
     }
+  },
+  build: {
+    chunkSizeWarningLimit: 1600,
   }
 });
