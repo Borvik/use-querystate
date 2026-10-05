@@ -2,6 +2,23 @@
   "name": "@borvik/use-querystate",
   "entries": [
     {
+      "version": "4.0.1",
+      "tag": "@borvik/use-querystate_v4.0.1",
+      "date": "Mon, 05 Oct 2026 13:56:15 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Updated build proicess and updated lodash"
+          }
+        ],
+        "dependency": [
+          {
+            "comment": "Updating dependency \"@borvik/querystring\" from `^4.0.0` to `4.0.1`"
+          }
+        ]
+      }
+    },
+    {
       "version": "4.0.0",
       "tag": "@borvik/use-querystate_v4.0.0",
       "date": "Wed, 04 Dec 2024 11:23:08 GMT",

@@ -1,6 +1,13 @@
 # Change Log - @borvik/use-querystate
 
-This log was last generated on Wed, 04 Dec 2024 11:23:08 GMT and should not be manually modified.
+This log was last generated on Mon, 05 Oct 2026 13:56:15 GMT and should not be manually modified.
+
+## 4.0.1
+Mon, 05 Oct 2026 13:56:15 GMT
+
+### Patches
+
+- Updated build proicess and updated lodash
 
 ## 4.0.0
 Wed, 04 Dec 2024 11:23:08 GMT

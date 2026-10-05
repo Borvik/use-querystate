@@ -21,6 +21,7 @@
     "jsx": "react",
     "declaration": true,
     "outDir": "./dist",
+    "rootDir": "./src",
     "noEmit": false
   },
   "files": [
