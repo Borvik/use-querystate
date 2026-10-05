@@ -14,7 +14,8 @@ import { buildTypeDefs } from "./buildTypeDefs.js";
 import { isEqual } from "./isEqual.js";
 import defaults from 'lodash/defaults.js';
 
-export type { PathTypes } from './types.js';
+export type { PathTypes, QueryStringFilterTypes } from './types.js';
+export { convertValue } from './convert/convertValue.js';
 
 export class QueryString {
 
